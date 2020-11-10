@@ -19,7 +19,7 @@ uint8_t on = 0;
 
 void SevenSeg_init()
 {
-	TIMSK = (1<<TOIE0);	//enable overflow-interrupt
+	TIMSK |= (1<<TOIE0);	//enable overflow-interrupt
 	
 	sei();
 }
@@ -47,6 +47,7 @@ void SevenSeg_set_val(uint8_t seg, uint16_t val)
 
 ISR(TIMER0_OVF_vect)
 {
+	PORTD |= (1<<PD5);
 	cli();
 
 	
@@ -66,6 +67,7 @@ ISR(TIMER0_OVF_vect)
 	TIFR &= ~(1<<TOV0);
 	
 	sei();
+	PORTD &= ~(1<<PD5);
 }
 
 

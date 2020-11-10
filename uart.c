@@ -26,3 +26,4 @@ void uart_send_blocking(uint8_t data)
 	}
 	UCSRA &= ~(1<<TXC);
 }
+

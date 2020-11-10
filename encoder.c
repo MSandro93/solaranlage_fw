@@ -12,6 +12,7 @@
 #include "regulator.h"
 #include "main.h"
 #include "timeout.h"
+#include "uart.h"
 
 #define ENC_PORT PORTD
 #define ENC_PINPORT PIND
@@ -41,11 +42,11 @@ ISR(INT0_vect)
 		{	
 			if( (ENC_PINPORT & (1<<ENC_B_PIN)) > 0) //if ENC_B_PIN == 1  //gegen den Uhrzeigersinn
 			{
-				inc_delta();
+				dec_delta();
 			}		
 			else									//im Uhrzeigersinn
 			{				
-				dec_delta();
+				inc_delta();
 			}
 		}
 		default:
@@ -84,6 +85,7 @@ ISR(INT1_vect)  //if the encoder got pushed
 			if((getState() == 3) && (eeprom_read_byte(0) != get_delta()))
 			{
 				eeprom_update_byte(0, get_delta());
+				uart_send_blocking('s');
 			}
 			setState(2);
 			break;

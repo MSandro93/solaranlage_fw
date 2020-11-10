@@ -10,6 +10,7 @@
 #include <avr/eeprom.h>
 #include "main.h"
 #include "regulator.h"
+#include "uart.h"
 
 void Timeout_init()
 {
@@ -35,15 +36,20 @@ void stop_timeout_timer()
 
 ISR(TIMER1_OVF_vect)
 {
+	PORTD |= (1<<PD5);
+	
 	cli();
 	
 	if((getState() == 3) && (eeprom_read_byte(0) != get_delta()))
 	{
 		eeprom_update_byte((uint8_t*)(0), (uint8_t)get_delta());
+		uart_send_blocking('s');
 	}
 	
 	setState(1);
 	
 	TIFR &= ~(1<<TOV1);
 	sei();
+	
+	PORTD &= ~(1<<PD5);
 }

@@ -16,7 +16,7 @@
 #define WDI_PORT PORTC
 #define WDI_PIN PC6
 
-uint8_t state = 0;
+volatile uint8_t state = 0;
 
 
 int main(void)
