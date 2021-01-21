@@ -3,33 +3,33 @@ solaranlage_fw.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .text         00000584  00000000  00000000  00000094  2**1
+  0 .text         00000594  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  1 .data         0000000c  00800060  00000584  00000618  2**0
+  1 .data         0000000c  00800060  00000594  00000628  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  2 .bss          00000013  0080006c  0080006c  00000624  2**0
+  2 .bss          00000013  0080006c  0080006c  00000634  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  00000624  2**0
+  3 .comment      00000030  00000000  00000000  00000634  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000654  2**2
+  4 .note.gnu.avr.deviceinfo 0000003c  00000000  00000000  00000664  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 000001a8  00000000  00000000  00000690  2**3
+  5 .debug_aranges 000001a8  00000000  00000000  000006a0  2**3
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00001119  00000000  00000000  00000838  2**0
+  6 .debug_info   00001164  00000000  00000000  00000848  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000009d6  00000000  00000000  00001951  2**0
+  7 .debug_abbrev 00000a0a  00000000  00000000  000019ac  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00001513  00000000  00000000  00002327  2**0
+  8 .debug_line   0000152b  00000000  00000000  000023b6  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  00000354  00000000  00000000  0000383c  2**2
+  9 .debug_frame  00000354  00000000  00000000  000038e4  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    00006673  00000000  00000000  00003b90  2**0
+ 10 .debug_str    0000667d  00000000  00000000  00003c38  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    000004ce  00000000  00000000  0000a203  2**0
+ 11 .debug_loc    000004f6  00000000  00000000  0000a2b5  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000108  00000000  00000000  0000a6d1  2**0
+ 12 .debug_ranges 00000108  00000000  00000000  0000a7ab  2**0
                   CONTENTS, READONLY, DEBUGGING
- 13 .debug_macro  00002819  00000000  00000000  0000a7d9  2**0
+ 13 .debug_macro  00002819  00000000  00000000  0000a8b3  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -44,7 +44,7 @@ Disassembly of section .text:
   18:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
   1c:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
   20:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
-  24:	0c 94 3d 02 	jmp	0x47a	; 0x47a <__vector_9>
+  24:	0c 94 45 02 	jmp	0x48a	; 0x48a <__vector_9>
   28:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
   2c:	0c 94 a8 00 	jmp	0x150	; 0x150 <__vector_11>
   30:	0c 94 47 00 	jmp	0x8e	; 0x8e <__bad_interrupt>
@@ -69,7 +69,7 @@ Disassembly of section .text:
   60:	10 e0       	ldi	r17, 0x00	; 0
   62:	a0 e6       	ldi	r26, 0x60	; 96
   64:	b0 e0       	ldi	r27, 0x00	; 0
-  66:	e4 e8       	ldi	r30, 0x84	; 132
+  66:	e4 e9       	ldi	r30, 0x94	; 148
   68:	f5 e0       	ldi	r31, 0x05	; 5
   6a:	02 c0       	rjmp	.+4      	; 0x70 <__do_copy_data+0x10>
   6c:	05 90       	lpm	r0, Z+
@@ -92,7 +92,7 @@ Disassembly of section .text:
   82:	b2 07       	cpc	r27, r18
   84:	e1 f7       	brne	.-8      	; 0x7e <.do_clear_bss_loop>
   86:	0e 94 88 01 	call	0x310	; 0x310 <main>
-  8a:	0c 94 c0 02 	jmp	0x580	; 0x580 <_exit>
+  8a:	0c 94 c8 02 	jmp	0x590	; 0x590 <_exit>
 
 0000008e <__bad_interrupt>:
   8e:	0c 94 00 00 	jmp	0	; 0x0 <__vectors>
@@ -128,7 +128,7 @@ void SevenSeg_set_val(uint8_t seg, uint16_t val)
   a8:	cb 01       	movw	r24, r22
   aa:	64 e6       	ldi	r22, 0x64	; 100
   ac:	70 e0       	ldi	r23, 0x00	; 0
-  ae:	0e 94 93 02 	call	0x526	; 0x526 <__udivmodhi4>
+  ae:	0e 94 9b 02 	call	0x536	; 0x536 <__udivmodhi4>
   b2:	9b 01       	movw	r18, r22
 	uint8_t z = (uint8_t) ((val- (h*100)) / 10 );
   b4:	eb 01       	movw	r28, r22
@@ -142,7 +142,7 @@ void SevenSeg_set_val(uint8_t seg, uint16_t val)
   c4:	ea e0       	ldi	r30, 0x0A	; 10
   c6:	f0 e0       	ldi	r31, 0x00	; 0
   c8:	bf 01       	movw	r22, r30
-  ca:	0e 94 93 02 	call	0x526	; 0x526 <__udivmodhi4>
+  ca:	0e 94 9b 02 	call	0x536	; 0x536 <__udivmodhi4>
 	uint8_t e = (uint8_t)  (val- (h*100)- (z*10));
   ce:	90 2f       	mov	r25, r16
   d0:	84 e6       	ldi	r24, 0x64	; 100
@@ -419,9 +419,9 @@ ISR(INT0_vect)
 	}
 	
 	stop_timeout_timer();
- 236:	0e 94 3a 02 	call	0x474	; 0x474 <stop_timeout_timer>
+ 236:	0e 94 42 02 	call	0x484	; 0x484 <stop_timeout_timer>
 	start_timeout_timer();
- 23a:	0e 94 35 02 	call	0x46a	; 0x46a <start_timeout_timer>
+ 23a:	0e 94 3d 02 	call	0x47a	; 0x47a <start_timeout_timer>
 	
 	
 	GIFR &= ~(1<<INTF0);  //clear ext-interrupt-0 flag
@@ -498,7 +498,7 @@ ISR(INT1_vect)  //if the encoder got pushed
  2a2:	83 e0       	ldi	r24, 0x03	; 3
  2a4:	0e 94 84 01 	call	0x308	; 0x308 <setState>
 			start_timeout_timer();
- 2a8:	0e 94 35 02 	call	0x46a	; 0x46a <start_timeout_timer>
+ 2a8:	0e 94 3d 02 	call	0x47a	; 0x47a <start_timeout_timer>
 			break;
  2ac:	1a c0       	rjmp	.+52     	; 0x2e2 <__vector_2+0x7a>
 		}
@@ -510,7 +510,7 @@ ISR(INT1_vect)  //if the encoder got pushed
  2b4:	99 f4       	brne	.+38     	; 0x2dc <__vector_2+0x74>
  2b6:	80 e0       	ldi	r24, 0x00	; 0
  2b8:	90 e0       	ldi	r25, 0x00	; 0
- 2ba:	0e 94 a7 02 	call	0x54e	; 0x54e <eeprom_read_byte>
+ 2ba:	0e 94 af 02 	call	0x55e	; 0x55e <eeprom_read_byte>
  2be:	c8 2f       	mov	r28, r24
  2c0:	0e 94 01 02 	call	0x402	; 0x402 <get_delta>
  2c4:	c8 17       	cp	r28, r24
@@ -521,10 +521,10 @@ ISR(INT1_vect)  //if the encoder got pushed
  2cc:	68 2f       	mov	r22, r24
  2ce:	80 e0       	ldi	r24, 0x00	; 0
  2d0:	90 e0       	ldi	r25, 0x00	; 0
- 2d2:	0e 94 af 02 	call	0x55e	; 0x55e <eeprom_update_byte>
+ 2d2:	0e 94 b7 02 	call	0x56e	; 0x56e <eeprom_update_byte>
 				uart_send_blocking('s');
  2d6:	83 e7       	ldi	r24, 0x73	; 115
- 2d8:	0e 94 8e 02 	call	0x51c	; 0x51c <uart_send_blocking>
+ 2d8:	0e 94 96 02 	call	0x52c	; 0x52c <uart_send_blocking>
 			}
 			setState(2);
  2dc:	82 e0       	ldi	r24, 0x02	; 2
@@ -563,7 +563,7 @@ void setState(uint8_t s)
 	state = s;
  308:	80 93 7a 00 	sts	0x007A, r24	; 0x80007a <state>
 	uart_send_blocking(s);
- 30c:	0c 94 8e 02 	jmp	0x51c	; 0x51c <uart_send_blocking>
+ 30c:	0c 94 96 02 	jmp	0x52c	; 0x52c <uart_send_blocking>
 
 00000310 <main>:
 volatile uint8_t state = 0;
@@ -590,7 +590,7 @@ int main(void)
  31e:	60 e0       	ldi	r22, 0x00	; 0
  320:	70 e0       	ldi	r23, 0x00	; 0
  322:	cb 01       	movw	r24, r22
- 324:	0e 94 82 02 	call	0x504	; 0x504 <uart_init>
+ 324:	0e 94 8a 02 	call	0x514	; 0x514 <uart_init>
 	regulator_init();
  328:	0e 94 df 01 	call	0x3be	; 0x3be <regulator_init>
 	
@@ -608,7 +608,7 @@ int main(void)
  340:	0e 94 4e 00 	call	0x9c	; 0x9c <SevenSeg_set_val>
 	
 	Timeout_init();
- 344:	0e 94 2f 02 	call	0x45e	; 0x45e <Timeout_init>
+ 344:	0e 94 37 02 	call	0x46e	; 0x46e <Timeout_init>
 	Encoder_init();
  348:	0e 94 f5 00 	call	0x1ea	; 0x1ea <Encoder_init>
 				SevenSeg_set_val(0, 1000); //set Kessel-display off
@@ -722,7 +722,7 @@ void disable_show_temps(void)
 	show_temps = 0;
  3be:	80 e0       	ldi	r24, 0x00	; 0
  3c0:	90 e0       	ldi	r25, 0x00	; 0
- 3c2:	0e 94 a7 02 	call	0x54e	; 0x54e <eeprom_read_byte>
+ 3c2:	0e 94 af 02 	call	0x55e	; 0x55e <eeprom_read_byte>
  3c6:	80 93 7e 00 	sts	0x007E, r24	; 0x80007e <delta>
  3ca:	85 b5       	in	r24, 0x25	; 37
  3cc:	87 60       	ori	r24, 0x07	; 7
@@ -816,7 +816,7 @@ ISR(TIMER2_OVF_vect)
  430:	80 91 7b 00 	lds	r24, 0x007B	; 0x80007b <loop_cnt>
  434:	8f 5f       	subi	r24, 0xFF	; 255
  436:	80 93 7b 00 	sts	0x007B, r24	; 0x80007b <loop_cnt>
- 43a:	06 c0       	rjmp	.+12     	; 0x448 <__vector_5+0x30>
+ 43a:	0e c0       	rjmp	.+28     	; 0x458 <__vector_5+0x40>
 	}
 	
 	else	//if it is time to work...
@@ -826,252 +826,281 @@ ISR(TIMER2_OVF_vect)
  43e:	80 e2       	ldi	r24, 0x20	; 32
  440:	89 27       	eor	r24, r25
  442:	82 bb       	out	0x12, r24	; 18
+uint8_t get_temp(uint8_t sensor)
+{
+	if(sensor==0)
+		return temp_kessel;	//dummy
+	else
+		return temp_dach;	//dummy
+ 444:	80 91 7d 00 	lds	r24, 0x007D	; 0x80007d <temp_dach>
+	
+	else	//if it is time to work...
+	{
+		PORTD ^= (1<<PD5);
+		
+		temp_dach   = get_temp(1);
+ 448:	80 93 7d 00 	sts	0x007D, r24	; 0x80007d <temp_dach>
+
+//sensor: 1=dach; 0=kessel
+uint8_t get_temp(uint8_t sensor)
+{
+	if(sensor==0)
+		return temp_kessel;	//dummy
+ 44c:	80 91 7c 00 	lds	r24, 0x007C	; 0x80007c <temp_kessel>
+	else	//if it is time to work...
+	{
+		PORTD ^= (1<<PD5);
+		
+		temp_dach   = get_temp(1);
+		temp_kessel = get_temp(0);
+ 450:	80 93 7c 00 	sts	0x007C, r24	; 0x80007c <temp_kessel>
+		
 		loop_cnt = 0;
- 444:	10 92 7b 00 	sts	0x007B, r1	; 0x80007b <loop_cnt>
+ 454:	10 92 7b 00 	sts	0x007B, r1	; 0x80007b <loop_cnt>
 	}
 	
 	
 	TIFR &= ~(1<<TOV2);			//clear flag
- 448:	88 b7       	in	r24, 0x38	; 56
- 44a:	8f 7b       	andi	r24, 0xBF	; 191
- 44c:	88 bf       	out	0x38, r24	; 56
+ 458:	88 b7       	in	r24, 0x38	; 56
+ 45a:	8f 7b       	andi	r24, 0xBF	; 191
+ 45c:	88 bf       	out	0x38, r24	; 56
 		
 	sei();
- 44e:	78 94       	sei
- 450:	9f 91       	pop	r25
- 452:	8f 91       	pop	r24
- 454:	0f 90       	pop	r0
- 456:	0f be       	out	0x3f, r0	; 63
- 458:	0f 90       	pop	r0
- 45a:	1f 90       	pop	r1
- 45c:	18 95       	reti
+ 45e:	78 94       	sei
+ 460:	9f 91       	pop	r25
+ 462:	8f 91       	pop	r24
+ 464:	0f 90       	pop	r0
+ 466:	0f be       	out	0x3f, r0	; 63
+ 468:	0f 90       	pop	r0
+ 46a:	1f 90       	pop	r1
+ 46c:	18 95       	reti
 
-0000045e <Timeout_init>:
+0000046e <Timeout_init>:
 #include "regulator.h"
 #include "uart.h"
 
 void Timeout_init()
 {
 	TCCR1A = 0x00;
- 45e:	1f bc       	out	0x2f, r1	; 47
+ 46e:	1f bc       	out	0x2f, r1	; 47
 	
 	TIMSK |= (1<<TOIE1);			//enable overflow-event
- 460:	89 b7       	in	r24, 0x39	; 57
- 462:	84 60       	ori	r24, 0x04	; 4
- 464:	89 bf       	out	0x39, r24	; 57
+ 470:	89 b7       	in	r24, 0x39	; 57
+ 472:	84 60       	ori	r24, 0x04	; 4
+ 474:	89 bf       	out	0x39, r24	; 57
 	sei();
- 466:	78 94       	sei
- 468:	08 95       	ret
+ 476:	78 94       	sei
+ 478:	08 95       	ret
 
-0000046a <start_timeout_timer>:
+0000047a <start_timeout_timer>:
 }
 void start_timeout_timer()
 {
 	TCNT1 = 0;						 //reset timer counter value
- 46a:	1d bc       	out	0x2d, r1	; 45
- 46c:	1c bc       	out	0x2c, r1	; 44
+ 47a:	1d bc       	out	0x2d, r1	; 45
+ 47c:	1c bc       	out	0x2c, r1	; 44
 	TCCR1B = (1<<CS12) | (1<<CS10);  //start timer at prescaler /1024
- 46e:	85 e0       	ldi	r24, 0x05	; 5
- 470:	8e bd       	out	0x2e, r24	; 46
- 472:	08 95       	ret
+ 47e:	85 e0       	ldi	r24, 0x05	; 5
+ 480:	8e bd       	out	0x2e, r24	; 46
+ 482:	08 95       	ret
 
-00000474 <stop_timeout_timer>:
+00000484 <stop_timeout_timer>:
 }
 
 void stop_timeout_timer()
 {
 	TCCR1B = ~((1<<CS12) | (1<<CS10)); //stop timer
- 474:	8a ef       	ldi	r24, 0xFA	; 250
- 476:	8e bd       	out	0x2e, r24	; 46
- 478:	08 95       	ret
+ 484:	8a ef       	ldi	r24, 0xFA	; 250
+ 486:	8e bd       	out	0x2e, r24	; 46
+ 488:	08 95       	ret
 
-0000047a <__vector_9>:
+0000048a <__vector_9>:
 
 
 
 
 ISR(TIMER1_OVF_vect)
 {
- 47a:	1f 92       	push	r1
- 47c:	0f 92       	push	r0
- 47e:	0f b6       	in	r0, 0x3f	; 63
- 480:	0f 92       	push	r0
- 482:	11 24       	eor	r1, r1
- 484:	2f 93       	push	r18
- 486:	3f 93       	push	r19
- 488:	4f 93       	push	r20
- 48a:	5f 93       	push	r21
- 48c:	6f 93       	push	r22
- 48e:	7f 93       	push	r23
- 490:	8f 93       	push	r24
- 492:	9f 93       	push	r25
- 494:	af 93       	push	r26
- 496:	bf 93       	push	r27
- 498:	cf 93       	push	r28
- 49a:	ef 93       	push	r30
- 49c:	ff 93       	push	r31
+ 48a:	1f 92       	push	r1
+ 48c:	0f 92       	push	r0
+ 48e:	0f b6       	in	r0, 0x3f	; 63
+ 490:	0f 92       	push	r0
+ 492:	11 24       	eor	r1, r1
+ 494:	2f 93       	push	r18
+ 496:	3f 93       	push	r19
+ 498:	4f 93       	push	r20
+ 49a:	5f 93       	push	r21
+ 49c:	6f 93       	push	r22
+ 49e:	7f 93       	push	r23
+ 4a0:	8f 93       	push	r24
+ 4a2:	9f 93       	push	r25
+ 4a4:	af 93       	push	r26
+ 4a6:	bf 93       	push	r27
+ 4a8:	cf 93       	push	r28
+ 4aa:	ef 93       	push	r30
+ 4ac:	ff 93       	push	r31
 	PORTD |= (1<<PD5);
- 49e:	95 9a       	sbi	0x12, 5	; 18
+ 4ae:	95 9a       	sbi	0x12, 5	; 18
 	
 	cli();
- 4a0:	f8 94       	cli
+ 4b0:	f8 94       	cli
 	
 	if((getState() == 3) && (eeprom_read_byte(0) != get_delta()))
- 4a2:	0e 94 dc 01 	call	0x3b8	; 0x3b8 <getState>
- 4a6:	83 30       	cpi	r24, 0x03	; 3
- 4a8:	99 f4       	brne	.+38     	; 0x4d0 <__vector_9+0x56>
- 4aa:	80 e0       	ldi	r24, 0x00	; 0
- 4ac:	90 e0       	ldi	r25, 0x00	; 0
- 4ae:	0e 94 a7 02 	call	0x54e	; 0x54e <eeprom_read_byte>
- 4b2:	c8 2f       	mov	r28, r24
- 4b4:	0e 94 01 02 	call	0x402	; 0x402 <get_delta>
- 4b8:	c8 17       	cp	r28, r24
- 4ba:	51 f0       	breq	.+20     	; 0x4d0 <__vector_9+0x56>
+ 4b2:	0e 94 dc 01 	call	0x3b8	; 0x3b8 <getState>
+ 4b6:	83 30       	cpi	r24, 0x03	; 3
+ 4b8:	99 f4       	brne	.+38     	; 0x4e0 <__vector_9+0x56>
+ 4ba:	80 e0       	ldi	r24, 0x00	; 0
+ 4bc:	90 e0       	ldi	r25, 0x00	; 0
+ 4be:	0e 94 af 02 	call	0x55e	; 0x55e <eeprom_read_byte>
+ 4c2:	c8 2f       	mov	r28, r24
+ 4c4:	0e 94 01 02 	call	0x402	; 0x402 <get_delta>
+ 4c8:	c8 17       	cp	r28, r24
+ 4ca:	51 f0       	breq	.+20     	; 0x4e0 <__vector_9+0x56>
 	{
 		eeprom_update_byte((uint8_t*)(0), (uint8_t)get_delta());
- 4bc:	0e 94 01 02 	call	0x402	; 0x402 <get_delta>
- 4c0:	68 2f       	mov	r22, r24
- 4c2:	80 e0       	ldi	r24, 0x00	; 0
- 4c4:	90 e0       	ldi	r25, 0x00	; 0
- 4c6:	0e 94 af 02 	call	0x55e	; 0x55e <eeprom_update_byte>
+ 4cc:	0e 94 01 02 	call	0x402	; 0x402 <get_delta>
+ 4d0:	68 2f       	mov	r22, r24
+ 4d2:	80 e0       	ldi	r24, 0x00	; 0
+ 4d4:	90 e0       	ldi	r25, 0x00	; 0
+ 4d6:	0e 94 b7 02 	call	0x56e	; 0x56e <eeprom_update_byte>
 		uart_send_blocking('s');
- 4ca:	83 e7       	ldi	r24, 0x73	; 115
- 4cc:	0e 94 8e 02 	call	0x51c	; 0x51c <uart_send_blocking>
+ 4da:	83 e7       	ldi	r24, 0x73	; 115
+ 4dc:	0e 94 96 02 	call	0x52c	; 0x52c <uart_send_blocking>
 	}
 	
 	setState(1);
- 4d0:	81 e0       	ldi	r24, 0x01	; 1
- 4d2:	0e 94 84 01 	call	0x308	; 0x308 <setState>
+ 4e0:	81 e0       	ldi	r24, 0x01	; 1
+ 4e2:	0e 94 84 01 	call	0x308	; 0x308 <setState>
 	
 	TIFR &= ~(1<<TOV1);
- 4d6:	88 b7       	in	r24, 0x38	; 56
- 4d8:	8b 7f       	andi	r24, 0xFB	; 251
- 4da:	88 bf       	out	0x38, r24	; 56
+ 4e6:	88 b7       	in	r24, 0x38	; 56
+ 4e8:	8b 7f       	andi	r24, 0xFB	; 251
+ 4ea:	88 bf       	out	0x38, r24	; 56
 	sei();
- 4dc:	78 94       	sei
+ 4ec:	78 94       	sei
 	
 	PORTD &= ~(1<<PD5);
- 4de:	95 98       	cbi	0x12, 5	; 18
- 4e0:	ff 91       	pop	r31
- 4e2:	ef 91       	pop	r30
- 4e4:	cf 91       	pop	r28
- 4e6:	bf 91       	pop	r27
- 4e8:	af 91       	pop	r26
- 4ea:	9f 91       	pop	r25
- 4ec:	8f 91       	pop	r24
- 4ee:	7f 91       	pop	r23
- 4f0:	6f 91       	pop	r22
- 4f2:	5f 91       	pop	r21
- 4f4:	4f 91       	pop	r20
- 4f6:	3f 91       	pop	r19
- 4f8:	2f 91       	pop	r18
- 4fa:	0f 90       	pop	r0
- 4fc:	0f be       	out	0x3f, r0	; 63
- 4fe:	0f 90       	pop	r0
- 500:	1f 90       	pop	r1
- 502:	18 95       	reti
+ 4ee:	95 98       	cbi	0x12, 5	; 18
+ 4f0:	ff 91       	pop	r31
+ 4f2:	ef 91       	pop	r30
+ 4f4:	cf 91       	pop	r28
+ 4f6:	bf 91       	pop	r27
+ 4f8:	af 91       	pop	r26
+ 4fa:	9f 91       	pop	r25
+ 4fc:	8f 91       	pop	r24
+ 4fe:	7f 91       	pop	r23
+ 500:	6f 91       	pop	r22
+ 502:	5f 91       	pop	r21
+ 504:	4f 91       	pop	r20
+ 506:	3f 91       	pop	r19
+ 508:	2f 91       	pop	r18
+ 50a:	0f 90       	pop	r0
+ 50c:	0f be       	out	0x3f, r0	; 63
+ 50e:	0f 90       	pop	r0
+ 510:	1f 90       	pop	r1
+ 512:	18 95       	reti
 
-00000504 <uart_init>:
+00000514 <uart_init>:
 #include <avr/io.h>
 
 
 void uart_init(uint32_t baud)
 {
 	UCSRB |= (1<<RXEN) | (1<<TXEN);  //enable receive and transmit
- 504:	8a b1       	in	r24, 0x0a	; 10
- 506:	88 61       	ori	r24, 0x18	; 24
- 508:	8a b9       	out	0x0a, r24	; 10
+ 514:	8a b1       	in	r24, 0x0a	; 10
+ 516:	88 61       	ori	r24, 0x18	; 24
+ 518:	8a b9       	out	0x0a, r24	; 10
 	UBRRL = 51;						 //setting datarate to 9600 baud/s
- 50a:	83 e3       	ldi	r24, 0x33	; 51
- 50c:	89 b9       	out	0x09, r24	; 9
+ 51a:	83 e3       	ldi	r24, 0x33	; 51
+ 51c:	89 b9       	out	0x09, r24	; 9
 
 	UCSRB |= (1<<RXEN) | (1<<TXEN);
- 50e:	8a b1       	in	r24, 0x0a	; 10
- 510:	88 61       	ori	r24, 0x18	; 24
- 512:	8a b9       	out	0x0a, r24	; 10
+ 51e:	8a b1       	in	r24, 0x0a	; 10
+ 520:	88 61       	ori	r24, 0x18	; 24
+ 522:	8a b9       	out	0x0a, r24	; 10
 
 	UCSRC |= (1<<URSEL) | (1<<UCSZ1) | (1<<UCSZ0);
- 514:	80 b5       	in	r24, 0x20	; 32
- 516:	86 68       	ori	r24, 0x86	; 134
- 518:	80 bd       	out	0x20, r24	; 32
- 51a:	08 95       	ret
+ 524:	80 b5       	in	r24, 0x20	; 32
+ 526:	86 68       	ori	r24, 0x86	; 134
+ 528:	80 bd       	out	0x20, r24	; 32
+ 52a:	08 95       	ret
 
-0000051c <uart_send_blocking>:
+0000052c <uart_send_blocking>:
 }
 
 
 void uart_send_blocking(uint8_t data)
 {
 	UDR = data;
- 51c:	8c b9       	out	0x0c, r24	; 12
+ 52c:	8c b9       	out	0x0c, r24	; 12
 	while( (UCSRA & (1<<TXC)) == 0 ) //wait for transfer finished
- 51e:	5e 9b       	sbis	0x0b, 6	; 11
- 520:	fe cf       	rjmp	.-4      	; 0x51e <uart_send_blocking+0x2>
+ 52e:	5e 9b       	sbis	0x0b, 6	; 11
+ 530:	fe cf       	rjmp	.-4      	; 0x52e <uart_send_blocking+0x2>
 	{
 	}
 	UCSRA &= ~(1<<TXC);
- 522:	5e 98       	cbi	0x0b, 6	; 11
- 524:	08 95       	ret
+ 532:	5e 98       	cbi	0x0b, 6	; 11
+ 534:	08 95       	ret
 
-00000526 <__udivmodhi4>:
- 526:	aa 1b       	sub	r26, r26
- 528:	bb 1b       	sub	r27, r27
- 52a:	51 e1       	ldi	r21, 0x11	; 17
- 52c:	07 c0       	rjmp	.+14     	; 0x53c <__udivmodhi4_ep>
+00000536 <__udivmodhi4>:
+ 536:	aa 1b       	sub	r26, r26
+ 538:	bb 1b       	sub	r27, r27
+ 53a:	51 e1       	ldi	r21, 0x11	; 17
+ 53c:	07 c0       	rjmp	.+14     	; 0x54c <__udivmodhi4_ep>
 
-0000052e <__udivmodhi4_loop>:
- 52e:	aa 1f       	adc	r26, r26
- 530:	bb 1f       	adc	r27, r27
- 532:	a6 17       	cp	r26, r22
- 534:	b7 07       	cpc	r27, r23
- 536:	10 f0       	brcs	.+4      	; 0x53c <__udivmodhi4_ep>
- 538:	a6 1b       	sub	r26, r22
- 53a:	b7 0b       	sbc	r27, r23
+0000053e <__udivmodhi4_loop>:
+ 53e:	aa 1f       	adc	r26, r26
+ 540:	bb 1f       	adc	r27, r27
+ 542:	a6 17       	cp	r26, r22
+ 544:	b7 07       	cpc	r27, r23
+ 546:	10 f0       	brcs	.+4      	; 0x54c <__udivmodhi4_ep>
+ 548:	a6 1b       	sub	r26, r22
+ 54a:	b7 0b       	sbc	r27, r23
 
-0000053c <__udivmodhi4_ep>:
- 53c:	88 1f       	adc	r24, r24
- 53e:	99 1f       	adc	r25, r25
- 540:	5a 95       	dec	r21
- 542:	a9 f7       	brne	.-22     	; 0x52e <__udivmodhi4_loop>
- 544:	80 95       	com	r24
- 546:	90 95       	com	r25
- 548:	bc 01       	movw	r22, r24
- 54a:	cd 01       	movw	r24, r26
- 54c:	08 95       	ret
-
-0000054e <eeprom_read_byte>:
- 54e:	e1 99       	sbic	0x1c, 1	; 28
- 550:	fe cf       	rjmp	.-4      	; 0x54e <eeprom_read_byte>
- 552:	9f bb       	out	0x1f, r25	; 31
- 554:	8e bb       	out	0x1e, r24	; 30
- 556:	e0 9a       	sbi	0x1c, 0	; 28
- 558:	99 27       	eor	r25, r25
- 55a:	8d b3       	in	r24, 0x1d	; 29
+0000054c <__udivmodhi4_ep>:
+ 54c:	88 1f       	adc	r24, r24
+ 54e:	99 1f       	adc	r25, r25
+ 550:	5a 95       	dec	r21
+ 552:	a9 f7       	brne	.-22     	; 0x53e <__udivmodhi4_loop>
+ 554:	80 95       	com	r24
+ 556:	90 95       	com	r25
+ 558:	bc 01       	movw	r22, r24
+ 55a:	cd 01       	movw	r24, r26
  55c:	08 95       	ret
 
-0000055e <eeprom_update_byte>:
- 55e:	26 2f       	mov	r18, r22
+0000055e <eeprom_read_byte>:
+ 55e:	e1 99       	sbic	0x1c, 1	; 28
+ 560:	fe cf       	rjmp	.-4      	; 0x55e <eeprom_read_byte>
+ 562:	9f bb       	out	0x1f, r25	; 31
+ 564:	8e bb       	out	0x1e, r24	; 30
+ 566:	e0 9a       	sbi	0x1c, 0	; 28
+ 568:	99 27       	eor	r25, r25
+ 56a:	8d b3       	in	r24, 0x1d	; 29
+ 56c:	08 95       	ret
 
-00000560 <eeprom_update_r18>:
- 560:	e1 99       	sbic	0x1c, 1	; 28
- 562:	fe cf       	rjmp	.-4      	; 0x560 <eeprom_update_r18>
- 564:	9f bb       	out	0x1f, r25	; 31
- 566:	8e bb       	out	0x1e, r24	; 30
- 568:	e0 9a       	sbi	0x1c, 0	; 28
- 56a:	01 97       	sbiw	r24, 0x01	; 1
- 56c:	0d b2       	in	r0, 0x1d	; 29
- 56e:	02 16       	cp	r0, r18
- 570:	31 f0       	breq	.+12     	; 0x57e <eeprom_update_r18+0x1e>
- 572:	2d bb       	out	0x1d, r18	; 29
- 574:	0f b6       	in	r0, 0x3f	; 63
- 576:	f8 94       	cli
- 578:	e2 9a       	sbi	0x1c, 2	; 28
- 57a:	e1 9a       	sbi	0x1c, 1	; 28
- 57c:	0f be       	out	0x3f, r0	; 63
- 57e:	08 95       	ret
+0000056e <eeprom_update_byte>:
+ 56e:	26 2f       	mov	r18, r22
 
-00000580 <_exit>:
- 580:	f8 94       	cli
+00000570 <eeprom_update_r18>:
+ 570:	e1 99       	sbic	0x1c, 1	; 28
+ 572:	fe cf       	rjmp	.-4      	; 0x570 <eeprom_update_r18>
+ 574:	9f bb       	out	0x1f, r25	; 31
+ 576:	8e bb       	out	0x1e, r24	; 30
+ 578:	e0 9a       	sbi	0x1c, 0	; 28
+ 57a:	01 97       	sbiw	r24, 0x01	; 1
+ 57c:	0d b2       	in	r0, 0x1d	; 29
+ 57e:	02 16       	cp	r0, r18
+ 580:	31 f0       	breq	.+12     	; 0x58e <eeprom_update_r18+0x1e>
+ 582:	2d bb       	out	0x1d, r18	; 29
+ 584:	0f b6       	in	r0, 0x3f	; 63
+ 586:	f8 94       	cli
+ 588:	e2 9a       	sbi	0x1c, 2	; 28
+ 58a:	e1 9a       	sbi	0x1c, 1	; 28
+ 58c:	0f be       	out	0x3f, r0	; 63
+ 58e:	08 95       	ret
 
-00000582 <__stop_program>:
- 582:	ff cf       	rjmp	.-2      	; 0x582 <__stop_program>
+00000590 <_exit>:
+ 590:	f8 94       	cli
+
+00000592 <__stop_program>:
+ 592:	ff cf       	rjmp	.-2      	; 0x592 <__stop_program>

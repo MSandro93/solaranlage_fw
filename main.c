@@ -30,7 +30,7 @@ int main(void)
 	DDRD |= (1<<PD5);
 	
 	uart_init(0);
-	regulator_init();
+	regulator_init();  //adc_init() is called by regulator_init()
 	
 	SevenSeg_init();
 	SevenSeg_set_val(1, 123);

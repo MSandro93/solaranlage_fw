@@ -8,6 +8,7 @@
 #include <avr/eeprom.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "adc.h"
 
 volatile uint8_t show_temps = 0;
 volatile uint8_t delta;
@@ -18,6 +19,8 @@ volatile uint8_t loop_cnt = 0;
 void regulator_init()
 {
 	delta = eeprom_read_byte(0);
+	
+	
 	
 	TCCR2 |= (1<<CS22) | (1<<CS21) | (1<<CS20);  //setting prescaler to /1024
 	TIMSK |= (1<<TOIE2);						 //enable overflow interrupt for TIM2
