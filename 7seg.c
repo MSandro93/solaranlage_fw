@@ -66,15 +66,15 @@ ISR(TIMER0_OVF_vect)
 	PORTB = patterns[segs[seg_cnt]];
 	
 	uint8_t a = (uint8_t) (~(1<<(seg_cnt + 2)));
-	PORTA = a & 0xFC;  //mask to avoid the ADC-channels 0 and 1
-	seg_cnt ++;
+	PORTA = a & 0xFC;	//mask to avoid ADC-channels 0 and 1
+	seg_cnt ++;			//switching to next segment
 	
-	if(seg_cnt == 6)
+	if(seg_cnt == 6)	//looping
 	{
 		seg_cnt = 0;
 	}
 	
-	TIFR &= ~(1<<TOV0);
+	TIFR &= ~(1<<TOV0);	//clear timer0 overflow interrupt flag
 	
 	sei();
 }
@@ -82,14 +82,13 @@ ISR(TIMER0_OVF_vect)
 
 void SevenSeg_on()
 {
-	TCNT0 = 0;							//resetting counter
 	TCCR0 = (1<<CS01) | (1<<CS00);		//setting prescaler to /256
 	on = 1;
 }
 
 void SevenSeg_off()
 {
-	TCCR0 &= ~((1<<CS01) | (1<<CS00));		//disable timer
+	TCCR0 &= ~((1<<CS01) | (1<<CS00));	//disable timer
 	TCNT0 = 0;							//resetting counter
 	PORTB = 0x00;
 	PORTA = 0xFC;

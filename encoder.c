@@ -71,6 +71,7 @@ ISR(INT1_vect)  //if the encoder got pushed
 		case 1:
 		{
 			setState(2);
+			stop_timeout_timer();
 			start_timeout_timer();
 			break;
 		}

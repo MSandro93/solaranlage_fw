@@ -40,12 +40,9 @@ int main(void)
 	
 	printf("startup!\n");
 	
-	
 	regulator_init();
-	
 	SevenSeg_init();
-	
-//	Timeout_init();
+	Timeout_init();
 	Encoder_init();
 	
     /* Replace with your application code */
@@ -55,14 +52,16 @@ int main(void)
 		{
 			case 0:
 			{
-				SevenSeg_off();
+				if(SevenSeg_get_state() == 1)  //disable display only if it is on
+					SevenSeg_off();		
 				setState(1);
 				break;
 			}
 			
 			case 1:
 			{
-				SevenSeg_off();
+				if(SevenSeg_get_state() == 1)  //disable display only if it is on
+					SevenSeg_off();		
 				break;
 			}
 				
@@ -70,7 +69,8 @@ int main(void)
 			{
 				SevenSeg_set_val(1, get_temp(1));
 				SevenSeg_set_val(0, get_temp(0));
-				SevenSeg_on();
+				if(SevenSeg_get_state() == 0)  //enable display only if it is off
+					SevenSeg_on();
 				break;
 			}
 			
@@ -78,7 +78,8 @@ int main(void)
 			{
 				SevenSeg_set_val(1, get_delta());
 				SevenSeg_set_val(0, 1000); //set Kessel-display off
-				SevenSeg_on();
+				if(SevenSeg_get_state() == 0)  //enable display only if it is off
+					SevenSeg_on();
 				break;
 			}
 		}

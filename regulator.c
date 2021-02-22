@@ -61,26 +61,26 @@ uint8_t get_delta()
 //sensor: 1=dach; 0=kessel
 uint8_t measure_temp(uint8_t sensor)
 {
-	ADMUX &= ~0x1F; //clear MUX4:0
+	ADMUX &= ~0x1F;							//clear MUX4:0
 	
 	if(sensor == 0)
-		ADMUX |= (1<<MUX0);	//set ADC to CH1
+		ADMUX |= (1<<MUX0);					//set ADC to CH1
 		
-	ADCSRA |= (1<<ADSC);				  //start conversion
+	ADCSRA |= (1<<ADSC);					//start conversion
 	
-	while( (ADCSRA & (1<<ADSC)) > 0 ) //wait for end of conversion
+	while( (ADCSRA & (1<<ADSC)) > 0 )		//wait for end of conversion
 	{
 	}
 	
-	uint16_t adc_val = ADCL;
-	adc_val += (ADCH<<8);
+	uint16_t adc_val = ADCL;				//get conversion result low-byte
+	adc_val += (ADCH<<8);					//and high-byte
 	
 	
-	float voltage = adc_val * 4.8828e-3f;
+	float voltage = adc_val * 4.854e-3f;	//get voltage from ADC-values
 	
-	float temp_f = 2.5f*((1000*voltage)/(5-voltage)) - 251.75f;
+	float temp_f = (7382.06f - voltage*2751.75f)/(voltage - 29.323f);		//get temperature from voltage
 	
-	uint8_t temp = (uint8_t) roundf( temp_f );
+	uint8_t temp = (uint8_t) roundf( temp_f );						//round temperature and cast it to int
 	
 	printf("sensor %d: ADC-val= %d, temp= %d\n", sensor, adc_val, temp);
 		
@@ -95,7 +95,7 @@ uint8_t get_temp(uint8_t sensor)
 	else if(sensor == 0)
 		return temp_kessel;
 	else
-		return 1000;
+		return 255;
 }
 
 

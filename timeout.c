@@ -27,7 +27,7 @@ void start_timeout_timer()
 
 void stop_timeout_timer()
 {
-	TCCR1B = ~((1<<CS12) | (1<<CS10)); //stop timer
+	TCCR1B &= ~((1<<CS12) | (1<<CS10)); //stop timer
 }
 
 
@@ -46,7 +46,7 @@ ISR(TIMER1_OVF_vect)
 	
 	setState(1);
 	
-	TCCR1B = ~((1<<CS12) | (1<<CS10)); //stop timer
+	TCCR1B &= ~((1<<CS12) | (1<<CS10)); //stop timer
 	TCNT1 = 0;						   //resetting counter register
 	
 	
