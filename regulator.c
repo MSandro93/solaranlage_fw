@@ -17,6 +17,8 @@ volatile uint8_t delta2;
 volatile uint8_t temp_dach = 0;
 volatile uint8_t temp_kessel = 0;
 volatile uint8_t loop_cnt = 0;
+volatile int16_t d_teta = 0;
+volatile uint8_t k = 5;
 
 void regulator_init()
 {
@@ -85,6 +87,7 @@ uint8_t get_delta(uint8_t i_)
 	{
 		return delta2;
 	}
+	return 255;
 }
 
 
@@ -148,6 +151,24 @@ ISR(TIMER2_OVF_vect)
 
 		temp_dach   = measure_temp(1);
 		temp_kessel = measure_temp(0);
+		
+		d_teta = temp_dach - temp_kessel;
+		
+		if(d_teta > delta1)
+		{
+			if( d_teta >= delta2)
+			{
+				set_PWM((uint8_t) d_teta * k);
+			}
+			else
+			{
+				set_PWM(0);
+			}
+		}
+		else
+		{
+			set_PWM(0);
+		}
 		
 		loop_cnt = 0;
 	}
