@@ -45,6 +45,8 @@ int main(void)
 	Timeout_init();
 	Encoder_init();
 	
+	set_PWM(63);
+	
     /* Replace with your application code */
     while (1) 
     {

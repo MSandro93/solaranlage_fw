@@ -25,8 +25,11 @@ void regulator_init()
 	ADMUX &= ~(1<<ADLAR);			  //enable left-alignment
 	ADCSRA |= (1<<ADEN);			  //enable ADC
 	
-	TCCR2 |= (1<<CS22) | (1<<CS21) | (1<<CS20);  //setting prescaler to /1024
+	TCCR2 |= (1<<CS22) | (1<<CS21) | (1<<CS20) | (1<<WGM21) | (1<<WGM20) | (1<<COM21) ;  //setting prescaler to /1024; setting mode to Fast PWM.
 	TIMSK |= (1<<TOIE2);						 //enable overflow interrupt for TIM2
+	
+	DDRD |= (1<<PD7); //the PWM-output to output-mode
+	
 	sei();
 }
 
@@ -96,6 +99,13 @@ uint8_t get_temp(uint8_t sensor)
 		return temp_kessel;
 	else
 		return 255;
+}
+
+
+//sets duty cycle; 0-255
+void set_PWM(uint8_t duty)
+{
+	OCR2 = duty;
 }
 
 
