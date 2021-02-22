@@ -82,13 +82,15 @@ ISR(TIMER0_OVF_vect)
 
 void SevenSeg_on()
 {
+	TCNT0 = 0;							//resetting counter
 	TCCR0 = (1<<CS01) | (1<<CS00);		//setting prescaler to /256
 	on = 1;
 }
 
 void SevenSeg_off()
 {
-	TCCR0 &= ~((1<<CS01) | (1<<CS00));		//setting prescaler to /256
+	TCCR0 &= ~((1<<CS01) | (1<<CS00));		//disable timer
+	TCNT0 = 0;							//resetting counter
 	PORTB = 0x00;
 	PORTA = 0xFC;
 	on = 0;
