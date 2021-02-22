@@ -4,6 +4,9 @@
  * Created: 09.11.2020 20:44:50
  *  Author: stoff
  */ 
+
+#define LOGGING
+
 #include <stdint.h>
 #include <avr/eeprom.h>
 #include <avr/io.h>
@@ -19,6 +22,7 @@ volatile uint8_t temp_kessel = 0;
 volatile uint8_t loop_cnt = 0;
 volatile int16_t d_teta = 0;
 volatile uint8_t k = 5;
+volatile uint8_t duty = 0;
 
 void regulator_init()
 {
@@ -158,20 +162,29 @@ ISR(TIMER2_OVF_vect)
 		{
 			if( d_teta >= delta2)
 			{
-				set_PWM((uint8_t) d_teta * k);
+				duty = (uint8_t) d_teta * k;
 			}
 			else
 			{
-				set_PWM(0);
+				duty = 0;
 			}
 		}
 		else
 		{
-			set_PWM(0);
+			duty = 0;
 		}
 		
+		set_PWM(duty);
+		
 		loop_cnt = 0;
+		
+		
+		#ifdef LOGGING
+		printf("%d,%d,%d\n", temp_dach, temp_kessel, duty);
+		#endif
 	}
+	
+	
 	
 	
 	TIFR &= ~(1<<TOV2);			//clear flag
