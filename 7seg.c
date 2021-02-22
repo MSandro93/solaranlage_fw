@@ -13,8 +13,8 @@
 uint8_t patterns[] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x00};
 uint16_t segs[6] = {0, 0, 0, 0, 0, 0};
 uint8_t seg_cnt = 0;
-uint8_t dach_anzeige = 0;
-uint8_t kessel_anzeige = 0;
+uint16_t dach_anzeige = 0;
+uint16_t kessel_anzeige = 0;
 uint8_t on = 0;
 
 
@@ -30,15 +30,19 @@ void SevenSeg_set_val(uint8_t seg, uint16_t val)
 {
 	if(seg==1)
 	{
-		dach_anzeige = val;
 		if (val!=dach_anzeige)
+		{
+			dach_anzeige = val;
 			printf("segment 'dach' set to %d\n", val);
+		}
 	}
 	else if(seg==0)
 	{
-		kessel_anzeige = val;
 		if(val!=kessel_anzeige)
+		{
+			kessel_anzeige = val;
 			printf("segment 'kessel' set to %d\n", val);
+		}
 	}
 	
 	uint8_t h = (uint8_t) (val/100);
@@ -59,12 +63,29 @@ void SevenSeg_set_val(uint8_t seg, uint16_t val)
 }
 
 
+
 ISR(TIMER0_OVF_vect)
 {
 	cli();
 	
-	PORTB = patterns[segs[seg_cnt]];
+	if(segs[seg_cnt] < 10)					//if the current digit to display is valid (0..9)..
+	{
+		PORTB = patterns[segs[seg_cnt]];	//set the propper pattern to the anodes.
+	}
+	else									//if the current digit to display is NOT valid, it is meant to be ignored..
+	{
+		PORTB = 0x00;						//therefore clear the anodes
+		seg_cnt ++;							//switch to nex segment
+		
+		if(seg_cnt == 6)	//looping
+		{
+			seg_cnt = 0;
+		}
+		sei();
+		return;								//leave. The common cathode of this segment shall not be activated.
+	}
 	
+	//if digit for this segment is valid..
 	uint8_t a = (uint8_t) (~(1<<(seg_cnt + 2)));
 	PORTA = a & 0xFC;	//mask to avoid ADC-channels 0 and 1
 	seg_cnt ++;			//switching to next segment

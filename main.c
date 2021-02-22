@@ -78,10 +78,19 @@ int main(void)
 			
 			case 3: 
 			{
-				SevenSeg_set_val(1, get_delta());
+				SevenSeg_set_val(1, get_delta(1));
 				SevenSeg_set_val(0, 1000); //set Kessel-display off
 				if(SevenSeg_get_state() == 0)  //enable display only if it is off
 					SevenSeg_on();
+				break;
+			}
+			
+			case 4:
+			{
+				SevenSeg_set_val(1, 1000); //set Dach-display off
+				SevenSeg_set_val(0, get_delta(2));
+				if(SevenSeg_get_state() == 0)  //enable display only if it is off
+				SevenSeg_on();
 				break;
 			}
 		}

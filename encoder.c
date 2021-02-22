@@ -42,13 +42,28 @@ ISR(INT0_vect)
 		{	
 			if( (ENC_PINPORT & (1<<ENC_B_PIN)) > 0) //if ENC_B_PIN == 1  //gegen den Uhrzeigersinn
 			{
-				dec_delta();
+				dec_delta(1);
 			}		
 			else									//im Uhrzeigersinn
-			{				
-				inc_delta();
+			{			
+				inc_delta(1);
 			}
+			break;
 		}
+		
+		case 4:
+		{
+			if( (ENC_PINPORT & (1<<ENC_B_PIN)) > 0) //if ENC_B_PIN == 1  //gegen den Uhrzeigersinn
+			{
+				dec_delta(2);
+			}
+			else									//im Uhrzeigersinn
+			{
+				inc_delta(2);
+			}
+			break;
+		}
+		
 		default:
 			break;
 	}
@@ -61,6 +76,7 @@ ISR(INT0_vect)
 	
 	sei();
 }
+
 
 ISR(INT1_vect)  //if the encoder got pushed
 {
@@ -83,9 +99,18 @@ ISR(INT1_vect)  //if the encoder got pushed
 		}
 		case 3:
 		{
-			if((getState() == 3) && (eeprom_read_byte(0) != get_delta()))
+			if(eeprom_read_byte(0) != get_delta(1))
 			{
-				eeprom_update_byte(0, get_delta());
+				eeprom_update_byte(0, get_delta(1));
+			}
+			setState(4);
+			break;
+		}
+		case 4:
+		{
+			if(eeprom_read_byte(1) != get_delta(2))
+			{
+				eeprom_update_byte(1, get_delta(2));
 			}
 			setState(2);
 			break;

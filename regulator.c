@@ -12,14 +12,16 @@
 #include "uart.h"
 
 volatile uint8_t show_temps = 0;
-volatile uint8_t delta;
+volatile uint8_t delta1;
+volatile uint8_t delta2;
 volatile uint8_t temp_dach = 0;
 volatile uint8_t temp_kessel = 0;
 volatile uint8_t loop_cnt = 0;
 
 void regulator_init()
 {
-	delta = eeprom_read_byte(0);
+	delta1 = eeprom_read_byte(0);
+	delta2 = eeprom_read_byte(1);
 	
 	ADMUX = 0x00;
 	ADMUX &= ~(1<<ADLAR);			  //enable left-alignment
@@ -43,21 +45,46 @@ void disable_show_temps(void)
 	show_temps = 0;
 }
 
-void inc_delta()
+void inc_delta(uint8_t i_)
 {
-	if(delta<100)
-		delta++;
+	if(i_==1)
+	{
+		if(delta1<100)
+			delta1++;
+	}
+	
+	if(i_==2)
+	{
+		if(delta2<100)
+			delta2++;
+	}			
 }
 
-void dec_delta()
+void dec_delta(uint8_t i_)
 {
-	if(delta>0)
-		delta --;
+	if(i_==1)
+	{
+		if(delta1>0)
+			delta1--;
+	}
+	
+	if(i_==2)
+	{
+		if(delta2>0)
+			delta2--;
+	}
 }
 
-uint8_t get_delta()
+uint8_t get_delta(uint8_t i_)
 {
-	return delta;
+	if(i_==1)
+	{
+		return delta1;
+	}
+	if(i_==2)
+	{
+		return delta2;
+	}
 }
 
 
