@@ -5,9 +5,10 @@
  *  Author: stoff
  */ 
 #include <avr/io.h>
+#include <stdio.h>
 
 
-void uart_init(uint32_t baud)
+void uart_init()
 {
 	UCSRB |= (1<<RXEN) | (1<<TXEN);  //enable receive and transmit
 	UBRRL = 51;						 //setting datarate to 9600 baud/s
@@ -18,12 +19,17 @@ void uart_init(uint32_t baud)
 }
 
 
-void uart_send_blocking(uint8_t data)
+int uart_putchar(char c, FILE *stream)
 {
-	UDR = data;
-	while( (UCSRA & (1<<TXC)) == 0 ) //wait for transfer finished
+	if(c=='\n')
+		uart_putchar('\r', stream);
+		
+		
+	while( (UCSRA & (1<<UDRE)) ==0 )
 	{
 	}
-	UCSRA &= ~(1<<TXC);
+		
+	UDR = c;
+	
+	return 0;
 }
-

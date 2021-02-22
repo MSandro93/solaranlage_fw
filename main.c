@@ -6,6 +6,7 @@
  */ 
 
 #include <avr/io.h>
+#include <stdio.h>
 #include "main.h"
 #include "7seg.h"
 #include "encoder.h"
@@ -18,25 +19,33 @@
 
 volatile uint8_t state = 0;
 
+static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL, _FDEV_SETUP_WRITE);
+
+
 
 int main(void)
 {
 	PORTA = 0x00;
 	PORTB = 0x00;
 	
-	DDRA = 0xFF;
+	DDRA = 0xFC;
 	DDRB = 0xFF;
 	DDRC |= (1<<WDI_PIN);
 	DDRD |= (1<<PD5);
 	
 	uart_init(0);
+	
+	
+	stdout = &mystdout;
+	
+	printf("startup!\n");
+	
+	
 	regulator_init();
 	
 	SevenSeg_init();
-	SevenSeg_set_val(1, 123);
-	SevenSeg_set_val(0, 1000);
 	
-	Timeout_init();
+//	Timeout_init();
 	Encoder_init();
 	
     /* Replace with your application code */
@@ -69,6 +78,7 @@ int main(void)
 			{
 				SevenSeg_set_val(1, get_delta());
 				SevenSeg_set_val(0, 1000); //set Kessel-display off
+				SevenSeg_on();
 				break;
 			}
 		}
@@ -80,7 +90,7 @@ int main(void)
 void setState(uint8_t s)
 {
 	state = s;
-	uart_send_blocking(s);
+	printf("state -> %d\n", state);
 }
 
 uint8_t getState()

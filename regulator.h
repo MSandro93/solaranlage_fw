@@ -16,5 +16,6 @@ void inc_delta();
 void dec_delta();
 uint8_t get_delta();
 uint8_t get_temp(uint8_t sensor);
+uint8_t measure_temp(uint8_t sensor);
 
 #endif /* REGULATOR_H_ */

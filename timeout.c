@@ -35,21 +35,21 @@ void stop_timeout_timer()
 
 
 ISR(TIMER1_OVF_vect)
-{
-	PORTD |= (1<<PD5);
-	
+{	
 	cli();
 	
 	if((getState() == 3) && (eeprom_read_byte(0) != get_delta()))
 	{
 		eeprom_update_byte((uint8_t*)(0), (uint8_t)get_delta());
-		uart_send_blocking('s');
+//		uart_send_blocking('s');
 	}
 	
 	setState(1);
 	
+	TCCR1B = ~((1<<CS12) | (1<<CS10)); //stop timer
+	TCNT1 = 0;						   //resetting counter register
+	
+	
 	TIFR &= ~(1<<TOV1);
 	sei();
-	
-	PORTD &= ~(1<<PD5);
 }

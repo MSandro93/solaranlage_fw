@@ -85,7 +85,6 @@ ISR(INT1_vect)  //if the encoder got pushed
 			if((getState() == 3) && (eeprom_read_byte(0) != get_delta()))
 			{
 				eeprom_update_byte(0, get_delta());
-				uart_send_blocking('s');
 			}
 			setState(2);
 			break;
