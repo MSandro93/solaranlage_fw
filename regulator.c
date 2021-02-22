@@ -20,8 +20,8 @@ volatile uint8_t loop_cnt = 0;
 
 void regulator_init()
 {
-	delta1 = eeprom_read_byte(0);
-	delta2 = eeprom_read_byte(1);
+	delta1 = eeprom_read_byte((uint8_t*)0);
+	delta2 = eeprom_read_byte((uint8_t*)1);
 	
 	ADMUX = 0x00;
 	ADMUX &= ~(1<<ADLAR);			  //enable left-alignment
@@ -94,7 +94,7 @@ uint8_t measure_temp(uint8_t sensor)
 	ADMUX &= ~0x1F;							//clear MUX4:0
 	
 	if(sensor == 0)
-		ADMUX |= (1<<MUX0);					//set ADC to CH1
+		ADMUX |= (1<<MUX0);					//set ADC to CH1. If CH2 has to be sampled MUX[4:0] is alreadyy 0, because it was rsetted above
 		
 	ADCSRA |= (1<<ADSC);					//start conversion
 	
@@ -106,14 +106,10 @@ uint8_t measure_temp(uint8_t sensor)
 	adc_val += (ADCH<<8);					//and high-byte
 	
 	
-	float voltage = adc_val * 4.854e-3f;	//get voltage from ADC-values
-	
-	float temp_f = (7382.06f - voltage*2751.75f)/(voltage - 29.323f);		//get temperature from voltage
-	
-	uint8_t temp = (uint8_t) roundf( temp_f );						//round temperature and cast it to int
-	
-	printf("sensor %d: ADC-val= %d, temp= %d\n", sensor, adc_val, temp);
-		
+	float voltage = adc_val * 4.854e-3f;									//get voltage from ADC-values	
+	float temp_f = (7382.06f - voltage*2751.75f)/(voltage - 29.323f);		//get temperature from voltage	
+	uint8_t temp = (uint8_t) roundf( temp_f );								//round temperature and cast it to int
+
 	return temp;
 }
 
