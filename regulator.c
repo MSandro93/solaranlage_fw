@@ -190,7 +190,7 @@ ISR(TIMER2_OVF_vect)
 		if(log_counter==5) //every 10 secounds
 		{
 			log_counter = 0;
-			printf("%d,%d,%d\n", temp_dach, temp_kessel, duty);
+			printf("%d;%d;%d\n", temp_dach, temp_kessel, duty);
 		}
 		#endif
 	}
