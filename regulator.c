@@ -23,6 +23,7 @@ volatile uint8_t loop_cnt = 0;
 volatile int16_t d_teta = 0;
 volatile uint8_t k = 5;
 volatile uint8_t duty = 0;
+volatile uint8_t log_counter = 0;
 
 void regulator_init()
 {
@@ -151,6 +152,11 @@ ISR(TIMER2_OVF_vect)
 	
 	else	//if it is time to work...
 	{
+		if (log_counter == 255)
+		{
+			log_counter = 0;
+		}
+		
 		PORTD ^= (1<<PD5);
 
 		temp_dach   = measure_temp(1);
@@ -177,10 +183,15 @@ ISR(TIMER2_OVF_vect)
 		set_PWM(duty);
 		
 		loop_cnt = 0;
+		log_counter ++;
 		
 		
 		#ifdef LOGGING
-		printf("%d,%d,%d\n", temp_dach, temp_kessel, duty);
+		if(log_counter==5) //every 10 secounds
+		{
+			log_counter = 0;
+			printf("%d,%d,%d\n", temp_dach, temp_kessel, duty);
+		}
 		#endif
 	}
 	
