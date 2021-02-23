@@ -159,7 +159,7 @@ ISR(TIMER2_OVF_vect)
 		
 		PORTD ^= (1<<PD5);
 
-		temp_dach   = measure_temp(1);
+		temp_dach   = (uint8_t)measure_temp(1) - 3; //-3 to compensate the wires
 		temp_kessel = measure_temp(0);
 		
 		d_teta = temp_dach - temp_kessel;
@@ -187,7 +187,7 @@ ISR(TIMER2_OVF_vect)
 		
 		
 		#ifdef LOGGING
-		if(log_counter==5) //every 10 secounds
+		if(log_counter==30) //every 60 secounds
 		{
 			log_counter = 0;
 			printf("%d;%d;%d\n", temp_dach, temp_kessel, duty);

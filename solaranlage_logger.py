@@ -6,7 +6,7 @@ from datetime import datetime
 port = input('which port number to open?: ')
 
 try:
-    ser = serial.Serial('COM'+port, 9600, timeout=20)
+    ser = serial.Serial('COM'+port, 9600, timeout=120)
 except:
     print('could not open serial port '+port)
     sys.exit(-1)
@@ -21,8 +21,10 @@ while True:
         break
 
     line = ser.readline()
-    time = datetime.now().now.strftime("%H:%M:%S")
-    f.write(time+';'+line+'\n')
+    print(line)
+    now = datetime.now()
+    time = now.strftime("%H:%M:%S")
+    f.write(str(time)+';'+str(line)+'\n')
     f.flush()
 
 f.flush()

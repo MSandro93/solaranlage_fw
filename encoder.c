@@ -99,18 +99,18 @@ ISR(INT1_vect)  //if the encoder got pushed
 		}
 		case 3:
 		{
-			if(eeprom_read_byte(0) != get_delta(1))
+			if(eeprom_read_byte((uint8_t*)0) != get_delta(1))
 			{
-				eeprom_update_byte(0, get_delta(1));
+				eeprom_update_byte((uint8_t*)0, get_delta(1));
 			}
 			setState(4);
 			break;
 		}
 		case 4:
 		{
-			if(eeprom_read_byte(1) != get_delta(2))
+			if(eeprom_read_byte((uint8_t*)1) != get_delta(2))
 			{
-				eeprom_update_byte(1, get_delta(2));
+				eeprom_update_byte((uint8_t*)1, get_delta(2));
 			}
 			setState(2);
 			break;
