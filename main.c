@@ -69,7 +69,11 @@ int main(void)
 				
 			case 2:
 			{
-				SevenSeg_set_val(1, get_temp(1));
+				if(get_temp(1) >= 0)	
+					SevenSeg_set_val(1, get_temp(1));
+				else
+					SevenSeg_set_val(1, get_temp(0));
+				
 				SevenSeg_set_val(0, get_temp(0));
 				if(SevenSeg_get_state() == 0)  //enable display only if it is off
 					SevenSeg_on();

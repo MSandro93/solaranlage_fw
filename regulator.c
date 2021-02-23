@@ -17,8 +17,8 @@
 volatile uint8_t show_temps = 0;
 volatile uint8_t delta1;
 volatile uint8_t delta2;
-volatile uint8_t temp_dach = 0;
-volatile uint8_t temp_kessel = 0;
+volatile int16_t temp_dach = 0;
+volatile int16_t temp_kessel = 0;
 volatile uint8_t loop_cnt = 0;
 volatile int16_t d_teta = 0;
 volatile uint8_t k = 5;
@@ -97,7 +97,7 @@ uint8_t get_delta(uint8_t i_)
 
 
 //sensor: 1=dach; 0=kessel
-uint8_t measure_temp(uint8_t sensor)
+int16_t measure_temp(uint8_t sensor)
 {
 	ADMUX &= ~0x1F;							//clear MUX4:0
 	
@@ -116,20 +116,20 @@ uint8_t measure_temp(uint8_t sensor)
 	
 	float voltage = adc_val * 4.854e-3f;									//get voltage from ADC-values	
 	float temp_f = (7382.06f - voltage*2751.75f)/(voltage - 29.323f);		//get temperature from voltage	
-	uint8_t temp = (uint8_t) roundf( temp_f );								//round temperature and cast it to int
+	int16_t temp = (int16_t) roundf( temp_f );								//round temperature and cast it to int
 
 	return temp;
 }
 
 //sensor: 1=dach; 0=kessel
-uint8_t get_temp(uint8_t sensor)
+int16_t get_temp(uint8_t sensor)
 {
 	if(sensor == 1)
 		return temp_dach;
 	else if(sensor == 0)
 		return temp_kessel;
 	else
-		return 255;
+		return 1000;
 }
 
 
@@ -159,7 +159,7 @@ ISR(TIMER2_OVF_vect)
 		
 		PORTD ^= (1<<PD5);
 
-		temp_dach   = (uint8_t)measure_temp(1) - 3; //-3 to compensate the wires
+		temp_dach   = (int16_t)measure_temp(1) - 3; //-3 to compensate the wires
 		temp_kessel = measure_temp(0);
 		
 		d_teta = temp_dach - temp_kessel;
