@@ -88,7 +88,7 @@ ISR(TIMER0_OVF_vect)
 {
 	cli();
 	
-	if(segs[seg_cnt] < 10)					//if the current digit to display is valid (0..9)..
+	if(segs[seg_cnt] != 10)					//if the current digit to display is valid (0..9)..
 	{
 		PORTB = patterns[segs[seg_cnt]];	//set the propper pattern to the anodes.
 	}

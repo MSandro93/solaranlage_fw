@@ -50,6 +50,20 @@ int main(void)
     /* Replace with your application code */
     while (1) 
     {
+		int16_t test_cnt = -100;
+		while(1)
+		{
+			SevenSeg_on();
+			SevenSeg_set_val(0, test_cnt);
+			test_cnt++;
+			
+			for(uint16_t i = 0; i<60000; i++)
+			{
+				test_cnt = test_cnt + 2;
+				test_cnt = test_cnt -2;
+			}
+		}
+				
 		switch(state)
 		{
 			case 0:
