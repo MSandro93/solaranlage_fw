@@ -38,14 +38,14 @@ ISR(TIMER1_OVF_vect)
 {	
 	cli();
 	
-	if((getState() == 3) && (eeprom_read_byte(0) != get_delta(0)))
+	if((getState() == 3) && (eeprom_read_byte((uint8_t*)0) != get_delta(1)))
 	{
-		eeprom_update_byte((uint8_t*)(0), (uint8_t)get_delta(0));
+		eeprom_update_byte((uint8_t*)(0), (uint8_t)get_delta(1));
 	}
 	
-	if((getState() == 4) && (eeprom_read_byte(1) != get_delta(1)))
+	if((getState() == 4) && (eeprom_read_byte((uint8_t*)1) != get_delta(2)))
 	{
-		eeprom_update_byte((uint8_t*)(1), (uint8_t)get_delta(1));
+		eeprom_update_byte((uint8_t*)(1), (uint8_t)get_delta(2));
 	}
 	
 	setState(1);

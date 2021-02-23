@@ -45,76 +45,67 @@ int main(void)
 	Timeout_init();
 	Encoder_init();
 	
-	set_PWM(63);
 	
-    /* Replace with your application code */
-    while (1) 
-    {
-		int16_t test_cnt = -100;
-		while(1)
-		{
-			SevenSeg_on();
-			SevenSeg_set_val(0, test_cnt);
-			test_cnt++;
-			
-			for(uint16_t i = 0; i<60000; i++)
-			{
-				test_cnt = test_cnt + 2;
-				test_cnt = test_cnt -2;
-			}
-		}
-				
+	while(1)	
+	{			
 		switch(state)
 		{
 			case 0:
 			{
-				if(SevenSeg_get_state() == 1)  //disable display only if it is on
-					SevenSeg_off();		
+				if(SevenSeg_get_state() == 1)						//disable display only if it is on
+				{
+					SevenSeg_off();
+				}
 				setState(1);
 				break;
 			}
 			
 			case 1:
 			{
-				if(SevenSeg_get_state() == 1)  //disable display only if it is on
-					SevenSeg_off();		
+				if(SevenSeg_get_state() == 1)						//disable display only if it is on
+				{
+					SevenSeg_off();
+				}
 				break;
 			}
 				
 			case 2:
 			{
-				if(get_temp(1) >= 0)	
-					SevenSeg_set_val(1, get_temp(1));
-				else
-					SevenSeg_set_val(1, get_temp(0));
-				
 				SevenSeg_set_val(0, get_temp(0));
-				if(SevenSeg_get_state() == 0)  //enable display only if it is off
+				SevenSeg_set_val(1, get_temp(1));
+
+				if(SevenSeg_get_state() == 0)						//enable display only if it is off
+				{
 					SevenSeg_on();
+				}
 				break;
 			}
 			
 			case 3: 
 			{
 				SevenSeg_set_val(1, get_delta(1));
-				SevenSeg_set_val(0, 1000); //set Kessel-display off
-				if(SevenSeg_get_state() == 0)  //enable display only if it is off
+				SevenSeg_set_val(0, 1000);							//set Kessel-display off
+				if(SevenSeg_get_state() == 0)						//enable display only if it is off
+				{
 					SevenSeg_on();
+				}
 				break;
 			}
 			
 			case 4:
 			{
-				SevenSeg_set_val(1, 1000); //set Dach-display off
+				SevenSeg_set_val(1, 1000);							//set Dach-display off
 				SevenSeg_set_val(0, get_delta(2));
-				if(SevenSeg_get_state() == 0)  //enable display only if it is off
-				SevenSeg_on();
+				if(SevenSeg_get_state() == 0)						//enable display only if it is off
+				{
+					SevenSeg_on();
+				}
 				break;
 			}
-		}
 		
-		WDI_PORT ^= (1<<WDI_PIN);
-    }
+			WDI_PORT ^= (1<<WDI_PIN);
+		}
+	}
 }
 
 void setState(uint8_t s)

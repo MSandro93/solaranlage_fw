@@ -21,7 +21,7 @@ volatile int16_t temp_dach = 0;
 volatile int16_t temp_kessel = 0;
 volatile uint8_t loop_cnt = 0;
 volatile int16_t d_teta = 0;
-volatile uint8_t k = 5;
+volatile uint8_t k = 2;
 volatile uint8_t duty = 0;
 volatile uint8_t log_counter = 0;
 
@@ -36,6 +36,12 @@ void regulator_init()
 	
 	TCCR2 |= (1<<CS22) | (1<<CS21) | (1<<CS20) | (1<<WGM21) | (1<<WGM20) | (1<<COM21) ;  //setting prescaler to /1024; setting mode to Fast PWM.
 	TIMSK |= (1<<TOIE2);						 //enable overflow interrupt for TIM2
+	
+	///only for testing ///
+	TIMSK |= (1<<OCIE2);
+	DDRD |= (1<<PD6);
+	///////////////////////
+	
 	
 	DDRD |= (1<<PD7); //the PWM-output to output-mode
 	
@@ -117,6 +123,11 @@ int16_t measure_temp(uint8_t sensor)
 	float voltage = adc_val * 4.854e-3f;									//get voltage from ADC-values	
 	float temp_f = (7382.06f - voltage*2751.75f)/(voltage - 29.323f);		//get temperature from voltage	
 	int16_t temp = (int16_t) roundf( temp_f );								//round temperature and cast it to int
+	
+	if(sensor == 1)
+	{
+		printf("%d;%.3f;%.3f;%d\n", adc_val, voltage, temp_f, temp);
+	}
 
 	return temp;
 }
@@ -125,24 +136,38 @@ int16_t measure_temp(uint8_t sensor)
 int16_t get_temp(uint8_t sensor)
 {
 	if(sensor == 1)
+	{
 		return temp_dach;
+	}
 	else if(sensor == 0)
+	{
 		return temp_kessel;
+	}
 	else
-		return 1000;
+	{
+		return -999;
+	}
 }
 
 
-//sets duty cycle; 0-255
+//sets duty cycle; 0-100%
 void set_PWM(uint8_t duty)
 {
-	OCR2 = duty;
+	OCR2 = (uint8_t)((duty/100.0f)*255);
 }
 
 
 
 ISR(TIMER2_OVF_vect)
 {
+	/// only for testing ///
+	if(OCR2 > 35)
+	{
+		PORTD |= (1<<PD6);
+	}
+	////////////////////////
+	
+	
 	cli();
 	
 	if(loop_cnt < 62) //if 2s are not passed
@@ -159,16 +184,25 @@ ISR(TIMER2_OVF_vect)
 		
 		PORTD ^= (1<<PD5);
 
-		temp_dach   = (int16_t)measure_temp(1) - 3; //-3 to compensate the wires
+		temp_dach   = measure_temp(1) - 3; //-3 to compensate the wires
 		temp_kessel = measure_temp(0);
 		
-		d_teta = temp_dach - temp_kessel;
 		
+		d_teta = temp_dach - temp_kessel;
+	
 		if(d_teta > delta1)
 		{
 			if( d_teta >= delta2)
 			{
-				duty = (uint8_t) d_teta * k;
+				if((d_teta * k) >= 0)
+				{
+					duty = (uint8_t) d_teta * k; //50 Kevlin -> 100% PWM
+					if( duty > 100)
+					{
+						duty = 100;
+					}
+				}
+				duty = 0;
 			}
 			else
 			{
@@ -181,7 +215,7 @@ ISR(TIMER2_OVF_vect)
 		}
 		
 		set_PWM(duty);
-		
+	
 		loop_cnt = 0;
 		log_counter ++;
 		
@@ -202,3 +236,12 @@ ISR(TIMER2_OVF_vect)
 		
 	sei();
 }
+
+
+/// only for testing ///
+ISR(TIMER2_COMP_vect)
+{
+	PORTD &= ~(1<<PD6);
+	TIFR &= ~(1<<OCF2);			//clear flag
+}
+///////////////////////
