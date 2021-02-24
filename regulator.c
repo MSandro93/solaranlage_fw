@@ -24,6 +24,7 @@ volatile int16_t d_teta = 0;
 volatile uint8_t k = 2;
 volatile uint8_t duty = 0;
 volatile uint8_t log_counter = 0;
+volatile uint8_t comming_from_high_temp = 0;
 
 void regulator_init()
 {
@@ -189,29 +190,34 @@ ISR(TIMER2_OVF_vect)
 		
 		
 		d_teta = temp_dach - temp_kessel;
+		
+		if(d_teta > delta1)									
+		{	
+			comming_from_high_temp = 1;						//if we are coming from a temperature difference higher than delta1, set flag
+		}
 	
-		if(d_teta > delta1)
+		if(comming_from_high_temp == 1)						//if we are coming from a temperature difference higher than delta1
 		{
-			if( d_teta >= delta2)
+			if( d_teta >= delta2)							//if we are still above delta 2
 			{
-				if((d_teta * k) >= 0)
+				if((d_teta * k) >= 0)						//if d_teta is negative the multiplication with k will lead to a negative duty cycle, so thsi has to be handled
 				{
-					duty = (uint8_t) d_teta * k; //50 Kevlin -> 100% PWM
+					duty = (uint8_t) d_teta * k;			//50 Kevlin -> 100% PWM
 					if( duty > 100)
 					{
 						duty = 100;
 					}
 				}
-				duty = 0;
+				else										//if we are finally at delta2 or lower, reset flag. Only if we get above delta1 again, the pump is going to be activatda gain
+				{
+					duty = 0;
+				}
 			}
 			else
 			{
 				duty = 0;
+				comming_from_high_temp = 0;
 			}
-		}
-		else
-		{
-			duty = 0;
 		}
 		
 		set_PWM(duty);

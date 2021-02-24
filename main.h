@@ -9,6 +9,8 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
+enum state { INIT, DISPLAY_OFF, SHOW_TEMPS, MODIFY_DELTA1, MODIFY_DELTA2};
+
 void setState(uint8_t s);
 uint8_t getState(void);
 

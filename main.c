@@ -50,17 +50,17 @@ int main(void)
 	{			
 		switch(state)
 		{
-			case 0:
+			case INIT:
 			{
 				if(SevenSeg_get_state() == 1)						//disable display only if it is on
 				{
 					SevenSeg_off();
 				}
-				setState(1);
+				setState(DISPLAY_OFF);
 				break;
 			}
 			
-			case 1:
+			case DISPLAY_OFF:
 			{
 				if(SevenSeg_get_state() == 1)						//disable display only if it is on
 				{
@@ -69,7 +69,7 @@ int main(void)
 				break;
 			}
 				
-			case 2:
+			case SHOW_TEMPS:
 			{
 				SevenSeg_set_val(0, get_temp(0));
 				SevenSeg_set_val(1, get_temp(1));
@@ -81,7 +81,7 @@ int main(void)
 				break;
 			}
 			
-			case 3: 
+			case MODIFY_DELTA1: 
 			{
 				SevenSeg_set_val(1, get_delta(1));
 				SevenSeg_set_val(0, 1000);							//set Kessel-display off
@@ -92,7 +92,7 @@ int main(void)
 				break;
 			}
 			
-			case 4:
+			case MODIFY_DELTA2:
 			{
 				SevenSeg_set_val(1, 1000);							//set Dach-display off
 				SevenSeg_set_val(0, get_delta(2));

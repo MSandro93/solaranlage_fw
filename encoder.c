@@ -86,14 +86,14 @@ ISR(INT1_vect)  //if the encoder got pushed
 	{
 		case 1:
 		{
-			setState(2);
+			setState(SHOW_TEMPS);
 			stop_timeout_timer();
 			start_timeout_timer();
 			break;
 		}
 		case 2:
 		{
-			setState(3);
+			setState(MODIFY_DELTA1);
 			start_timeout_timer();
 			break;
 		}
@@ -103,7 +103,7 @@ ISR(INT1_vect)  //if the encoder got pushed
 			{
 				eeprom_update_byte((uint8_t*)0, get_delta(1));
 			}
-			setState(4);
+			setState(MODIFY_DELTA2);
 			break;
 		}
 		case 4:
@@ -112,7 +112,7 @@ ISR(INT1_vect)  //if the encoder got pushed
 			{
 				eeprom_update_byte((uint8_t*)1, get_delta(2));
 			}
-			setState(2);
+			setState(SHOW_TEMPS);
 			break;
 		}
 	}

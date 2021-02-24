@@ -48,7 +48,7 @@ ISR(TIMER1_OVF_vect)
 		eeprom_update_byte((uint8_t*)(1), (uint8_t)get_delta(2));
 	}
 	
-	setState(1);
+	setState(DISPLAY_OFF);
 	
 	TCCR1B &= ~((1<<CS12) | (1<<CS10)); //stop timer
 	TCNT1 = 0;						   //resetting counter register
