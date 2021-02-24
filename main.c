@@ -47,7 +47,7 @@ int main(void)
 	
 	
 	while(1)	
-	{			
+	{	
 		switch(state)
 		{
 			case INIT:
@@ -102,16 +102,15 @@ int main(void)
 				}
 				break;
 			}
-		
-			WDI_PORT ^= (1<<WDI_PIN);
 		}
+		WDI_PORT ^= (1<<WDI_PIN);
 	}
 }
 
 void setState(uint8_t s)
 {
 	state = s;
-	printf("state -> %d\n", state);
+//	printf("state -> %d\n", state);
 }
 
 uint8_t getState()

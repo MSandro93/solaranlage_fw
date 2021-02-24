@@ -38,13 +38,7 @@ void regulator_init()
 	TCCR2 |= (1<<CS22) | (1<<CS21) | (1<<CS20) | (1<<WGM21) | (1<<WGM20) | (1<<COM21) ;  //setting prescaler to /1024; setting mode to Fast PWM.
 	TIMSK |= (1<<TOIE2);						 //enable overflow interrupt for TIM2
 	
-	///only for testing ///
-	TIMSK |= (1<<OCIE2);
-	DDRD |= (1<<PD6);
-	///////////////////////
-	
-	
-	DDRD |= (1<<PD7); //the PWM-output to output-mode
+	DDRD |= (1<<PD7);				//set the PWM-output pin to output-mode
 	
 	sei();
 }
@@ -125,10 +119,6 @@ int16_t measure_temp(uint8_t sensor)
 	float temp_f = (7382.06f - voltage*2751.75f)/(voltage - 29.323f);		//get temperature from voltage	
 	int16_t temp = (int16_t) roundf( temp_f );								//round temperature and cast it to int
 	
-	if(sensor == 1)
-	{
-		printf("%d;%.3f;%.3f;%d\n", adc_val, voltage, temp_f, temp);
-	}
 
 	return temp;
 }
@@ -160,14 +150,7 @@ void set_PWM(uint8_t duty)
 
 
 ISR(TIMER2_OVF_vect)
-{
-	/// only for testing ///
-	if(OCR2 > 35)
-	{
-		PORTD |= (1<<PD6);
-	}
-	////////////////////////
-	
+{	
 	
 	cli();
 	
@@ -227,7 +210,7 @@ ISR(TIMER2_OVF_vect)
 		
 		
 		#ifdef LOGGING
-		if(log_counter==30) //every 60 secounds
+		if(log_counter==15) //every 30 secounds
 		{
 			log_counter = 0;
 			printf("%d;%d;%d\n", temp_dach, temp_kessel, duty);
@@ -242,12 +225,3 @@ ISR(TIMER2_OVF_vect)
 		
 	sei();
 }
-
-
-/// only for testing ///
-ISR(TIMER2_COMP_vect)
-{
-	PORTD &= ~(1<<PD6);
-	TIFR &= ~(1<<OCF2);			//clear flag
-}
-///////////////////////
