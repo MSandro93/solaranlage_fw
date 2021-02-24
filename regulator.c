@@ -31,6 +31,20 @@ void regulator_init()
 	delta1 = eeprom_read_byte((uint8_t*)0);
 	delta2 = eeprom_read_byte((uint8_t*)1);
 	
+	if(delta1 > 70)						//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was ereased befor programing.
+	{
+		delta1 = 70;
+		eeprom_update_byte((uint8_t*)0, 70);
+		
+	}
+	
+	if(delta2 > 70)						//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was ereased befor programing.
+	{
+		delta1 = 70;
+		eeprom_update_byte((uint8_t*)1, 70);
+	}
+	
+	
 	ADMUX = 0x00;
 	ADMUX &= ~(1<<ADLAR);			  //enable left-alignment
 	ADCSRA |= (1<<ADEN);			  //enable ADC
