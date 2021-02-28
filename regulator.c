@@ -26,6 +26,8 @@ volatile uint8_t duty = 0;
 volatile uint8_t log_counter = 0;
 volatile uint8_t comming_from_high_temp = 0;
 
+#define OVERSAMPLING_CNT 10
+
 void regulator_init()
 {
 	delta1 = eeprom_read_byte((uint8_t*)0);
@@ -100,25 +102,33 @@ uint8_t get_delta(uint8_t i_)
 //sensor: 1=dach; 0=kessel
 int16_t measure_temp(uint8_t sensor)
 {
-	ADMUX &= ~0x1F;							//clear MUX4:0
+	uint32_t adc_val_avg = 0;
+	uint16_t adc_val = 0;
 	
-	if(sensor == 0)
-		ADMUX |= (1<<MUX0);					//set ADC to CH1. If CH2 has to be sampled MUX[4:0] is alreadyy 0, because it was rsetted above
-		
-	ADCSRA |= (1<<ADSC);					//start conversion
-	
-	while( (ADCSRA & (1<<ADSC)) > 0 )		//wait for end of conversion
+	for(uint8_t i=0; i < OVERSAMPLING_CNT; i++)
 	{
+		ADMUX &= ~0x1F;							//clear MUX4:0
+	
+		if(sensor == 0)
+			ADMUX |= (1<<MUX0);					//set ADC to CH1. If CH2 has to be sampled MUX[4:0] is already 0, because it was restted above
+		
+		ADCSRA |= (1<<ADSC);					//start conversion
+	
+		while( (ADCSRA & (1<<ADSC)) > 0 )		//wait for end of conversion
+		{
+		}
+	
+		adc_val = ADCL;							//get conversion result low-byte
+		adc_val += (ADCH<<8);					//and high-byte
+		
+		adc_val_avg += adc_val;					//sum up adc values for oversampling 
 	}
 	
-	uint16_t adc_val = ADCL;				//get conversion result low-byte
-	adc_val += (ADCH<<8);					//and high-byte
-	
+	adc_val = (uint16_t)(adc_val_avg / OVERSAMPLING_CNT); //calculate average with oversampling count
 	
 	float voltage = adc_val * 4.854e-3f;									//get voltage from ADC-values	
 	float temp_f = (7382.06f - voltage*2751.75f)/(voltage - 29.323f);		//get temperature from voltage	
 	int16_t temp = (int16_t) roundf( temp_f );								//round temperature and cast it to int
-	
 
 	return temp;
 }
@@ -206,20 +216,12 @@ ISR(TIMER2_OVF_vect)
 		set_PWM(duty);
 	
 		loop_cnt = 0;
-		log_counter ++;
-		
-		
+
+		// Enable logging with define		
 		#ifdef LOGGING
-		if(log_counter==15) //every 30 secounds
-		{
-			log_counter = 0;
-			printf("%d;%d;%d\n", temp_dach, temp_kessel, duty);
-		}
+			printf("%d,%d,%d,%d\r\n", temp_dach, temp_kessel, d_teta, duty);
 		#endif
 	}
-	
-	
-	
 	
 	TIFR &= ~(1<<TOV2);			//clear flag
 		
