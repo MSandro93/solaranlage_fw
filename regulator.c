@@ -33,6 +33,20 @@ void regulator_init()
 	delta1 = eeprom_read_byte((uint8_t*)0);
 	delta2 = eeprom_read_byte((uint8_t*)1);
 	
+	if(delta1 > 70)						//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was ereased befor programing.
+	{
+		delta1 = 70;
+		eeprom_update_byte((uint8_t*)0, 70);
+		
+	}
+	
+	if(delta2 > 70)						//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was ereased befor programing.
+	{
+		delta1 = 70;
+		eeprom_update_byte((uint8_t*)1, 70);
+	}
+	
+	
 	ADMUX = 0x00;
 	ADMUX &= ~(1<<ADLAR);			  //enable left-alignment
 	ADCSRA |= (1<<ADEN);			  //enable ADC
@@ -108,26 +122,26 @@ int16_t measure_temp(uint8_t sensor)
 	for(uint8_t i=0; i < OVERSAMPLING_CNT; i++)
 	{
 		ADMUX &= ~0x1F;							//clear MUX4:0
-	
+		
 		if(sensor == 0)
-			ADMUX |= (1<<MUX0);					//set ADC to CH1. If CH2 has to be sampled MUX[4:0] is already 0, because it was restted above
+		ADMUX |= (1<<MUX0);					//set ADC to CH1. If CH2 has to be sampled MUX[4:0] is already 0, because it was restted above
 		
 		ADCSRA |= (1<<ADSC);					//start conversion
-	
+		
 		while( (ADCSRA & (1<<ADSC)) > 0 )		//wait for end of conversion
 		{
 		}
-	
+		
 		adc_val = ADCL;							//get conversion result low-byte
 		adc_val += (ADCH<<8);					//and high-byte
 		
-		adc_val_avg += adc_val;					//sum up adc values for oversampling 
+		adc_val_avg += adc_val;					//sum up ADC values for oversampling
 	}
 	
 	adc_val = (uint16_t)(adc_val_avg / OVERSAMPLING_CNT); //calculate average with oversampling count
 	
-	float voltage = adc_val * 4.854e-3f;									//get voltage from ADC-values	
-	float temp_f = (7382.06f - voltage*2751.75f)/(voltage - 29.323f);		//get temperature from voltage	
+	float voltage = adc_val * 4.854e-3f;									//get voltage from ADC-values
+	float temp_f = (7382.06f - voltage*2751.75f)/(voltage - 29.323f);		//get temperature from voltage
 	int16_t temp = (int16_t) roundf( temp_f );								//round temperature and cast it to int
 
 	return temp;

@@ -25,7 +25,7 @@ uint8_t selected_seg = 1;
 void Encoder_init()
 {
 	ENC_PORT &= ~((1<<ENC_A_PIN) | (1<<ENC_A_PIN));							//setting encoder terminals to input
-	MCUCR |= (1<<ISC01) | (1<<ISC00) | (1<<ISC11);				//setting ext-int0 to sensitive at rising edge
+	MCUCR |= (1<<ISC01) | (1<<ISC00) | (1<<ISC11);							//setting ext-int0 to sensitive at rising edge
 	GICR |= (1<<INT0) | (1<<INT1);											//enable external interrupt 0 (ENC_A_PIN)
 	sei();
 }
@@ -40,26 +40,30 @@ ISR(INT0_vect)
 	{
 		case 3:	
 		{	
-			if( (ENC_PINPORT & (1<<ENC_B_PIN)) > 0) //if ENC_B_PIN == 1  //gegen den Uhrzeigersinn
+			if( (ENC_PINPORT & (1<<ENC_B_PIN)) > 0) //gegen den Uhrzeigersinn
 			{
-				dec_delta(1);
+				if(get_delta(1) > 0)
+					dec_delta(1);					//prevent delta1 from becoming negative
 			}		
 			else									//im Uhrzeigersinn
-			{			
-				inc_delta(1);
+			{	
+				if(get_delta(1) < 70)
+					inc_delta(1);					//prevent delta2 from becoming lager than 70
 			}
 			break;
 		}
 		
 		case 4:
 		{
-			if( (ENC_PINPORT & (1<<ENC_B_PIN)) > 0) //if ENC_B_PIN == 1  //gegen den Uhrzeigersinn
+			if( (ENC_PINPORT & (1<<ENC_B_PIN)) > 0) //gegen den Uhrzeigersinn
 			{
-				dec_delta(2);
+				if(get_delta(2) > 0)
+					dec_delta(2);					//prevent delta2 from becoming negative
 			}
 			else									//im Uhrzeigersinn
 			{
-				inc_delta(2);
+				if(get_delta(2) < 70)
+					inc_delta(2);					//prevent delta2 from becoming lager than 70
 			}
 			break;
 		}
