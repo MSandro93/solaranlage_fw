@@ -1,3 +1,6 @@
+/.vs
+/.vscode
+/Debug
 *.elf
 *.hex
 *.o
