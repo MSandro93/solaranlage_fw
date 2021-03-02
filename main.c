@@ -38,7 +38,7 @@ int main(void)
 
 	stdout = &mystdout;
 	
-	printf("##### Solaranlage Version %s Hash %s! #####\n", FW_VERSION_TAG, REPO_VERSION_HASH);
+	printf("##### Solaranlage Version %s Hash %s #####\n", FW_VERSION_TAG, REPO_VERSION_HASH);
 	
 	regulator_init();
 	SevenSeg_init();
