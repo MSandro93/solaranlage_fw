@@ -13,6 +13,7 @@
 #include "regulator.h"
 #include "uart.h"
 #include "timeout.h"
+#include "version.h"
 
 #define WDI_PORT PORTC
 #define WDI_PIN PC6
@@ -34,11 +35,10 @@ int main(void)
 	DDRD |= (1<<PD5);
 	
 	uart_init(0);
-	
-	
+
 	stdout = &mystdout;
 	
-	printf("startup!\n");
+	printf("##### Solaranlage Version %s Hash %s! #####\n", FW_VERSION_TAG, REPO_VERSION_HASH);
 	
 	regulator_init();
 	SevenSeg_init();
