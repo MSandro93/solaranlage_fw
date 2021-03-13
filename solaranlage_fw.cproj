@@ -46,15 +46,15 @@
     <avrtoolinterfaceclock>400000</avrtoolinterfaceclock>
     <AsfFrameworkConfig>
       <framework-data xmlns="">
-  <options />
-  <configurations />
-  <files />
-  <documentation help="" />
-  <offline-documentation help="" />
-  <dependencies>
-    <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.47.0" />
-  </dependencies>
-</framework-data>
+        <options />
+        <configurations />
+        <files />
+        <documentation help="" />
+        <offline-documentation help="" />
+        <dependencies>
+          <content-extension eid="atmel.asf" uuidref="Atmel.ASF" version="3.47.0" />
+        </dependencies>
+      </framework-data>
     </AsfFrameworkConfig>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
@@ -148,6 +148,12 @@
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="encoder.h">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="extGPOS.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="extGPOS.h">
       <SubType>compile</SubType>
     </Compile>
     <Compile Include="main.c">

@@ -1,3 +1,5 @@
+exit 0
+
 cd /D "%~dp0"
 del .\version.h
 echo|set /p="#define REPO_VERSION_HASH " >> .\version.h

@@ -1,2 +1,2 @@
-#define REPO_VERSION_HASH "283b78f" 
-#define FW_VERSION_TAG "v0.1" 
+#define REPO_VERSION_HASH "1d32fc1" 
+#define FW_VERSION_TAG "" 

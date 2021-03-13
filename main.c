@@ -14,6 +14,7 @@
 #include "uart.h"
 #include "timeout.h"
 #include "version.h"
+#include "extGPOS.h"
 
 #define WDI_PORT PORTC
 #define WDI_PIN PC6
@@ -26,6 +27,9 @@ static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL, _FDEV_SETUP_WRITE);
 
 int main(void)
 {
+	extGPOs_init();
+	extGPOS_clearAll();
+	
 	PORTA = 0x00;
 	PORTB = 0x00;
 	
