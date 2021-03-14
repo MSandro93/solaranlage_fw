@@ -227,7 +227,7 @@ ISR(TIMER2_OVF_vect)
 			}
 		}
 		
-		set_PWM(duty);
+//		set_PWM(duty);
 	
 		loop_cnt = 0;
 
