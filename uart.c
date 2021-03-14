@@ -11,7 +11,7 @@
 void uart_init()
 {
 	UCSRB |= (1<<RXEN) | (1<<TXEN);  //enable receive and transmit
-	UBRRL = 51;						 //setting datarate to 9600 baud/s
+	UBRRL = 3;						 //setting datarate to 9600 baud/s
 
 	UCSRB |= (1<<RXEN) | (1<<TXEN);
 

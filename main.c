@@ -30,6 +30,7 @@ int main(void)
 	extGPOs_init();
 	extGPOS_clearAll();
 	
+	
 	PORTA = 0x00;
 	PORTB = 0x00;
 	
@@ -61,6 +62,9 @@ int main(void)
 					SevenSeg_off();
 				}
 				setState(DISPLAY_OFF);
+				
+				extGPOS_clearAll();
+				extGPO_update();
 				break;
 			}
 			
@@ -70,18 +74,26 @@ int main(void)
 				{
 					SevenSeg_off();
 				}
+				
+				extGPOS_clearAll();
+				extGPO_update();
 				break;
 			}
 				
 			case SHOW_TEMPS:
 			{
 				SevenSeg_set_val(0, get_temp(0));
-				SevenSeg_set_val(1, get_temp(1));
+				SevenSeg_set_val(1, get_temp(1));			
 
 				if(SevenSeg_get_state() == 0)						//enable display only if it is off
 				{
 					SevenSeg_on();
 				}
+				
+				extGPOS_clearAll();
+				extGPO_switch(LED_TEMP_DACH, EXGPO_ON);
+				extGPO_switch(LED_TEMP_KELLER, EXGPO_ON);
+				extGPO_update();
 				break;
 			}
 			
@@ -93,6 +105,10 @@ int main(void)
 				{
 					SevenSeg_on();
 				}
+				
+				extGPOS_clearAll();
+				extGPO_switch(LED_DELTA1, EXGPO_ON);
+				extGPO_update();
 				break;
 			}
 			
@@ -104,6 +120,10 @@ int main(void)
 				{
 					SevenSeg_on();
 				}
+				
+				extGPOS_clearAll();
+				extGPO_switch(LED_DELTA2, EXGPO_ON);
+				extGPO_update();
 				break;
 			}
 		}
