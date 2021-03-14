@@ -13,7 +13,7 @@
 #include "main.h"
 #include "timeout.h"
 #include "uart.h"
-#include "version.h"<>
+#include "version.h"
 
 #define ENC_PORT PORTD
 #define ENC_PINPORT PIND

@@ -50,6 +50,7 @@ int main(void)
 	Timeout_init();
 	Encoder_init();
 	
+
 	
 	while(1)	
 	{	
