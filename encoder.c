@@ -13,6 +13,7 @@
 #include "main.h"
 #include "timeout.h"
 #include "uart.h"
+#include "version.h"<>
 
 #define ENC_PORT PORTD
 #define ENC_PINPORT PIND
@@ -91,6 +92,10 @@ ISR(INT1_vect)  //if the encoder got pushed
 		case 1:
 		{
 			setState(SHOW_TEMPS);
+			
+			printf("Tag: %s\n\r", FW_VERSION_TAG);
+			printf("Hash: %s\n\r", REPO_VERSION_HASH);
+			
 			stop_timeout_timer();
 			start_timeout_timer();
 			break;

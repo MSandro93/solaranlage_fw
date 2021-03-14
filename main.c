@@ -81,10 +81,7 @@ int main(void)
 			}
 				
 			case SHOW_TEMPS:
-			{
-				printf("Tag: %s\n\r", FW_VERSION_TAG);
-				printf("Hash: %s\n\r", REPO_VERSION_HASH);
-				
+			{				
 				SevenSeg_set_val(0, get_temp(0));
 				SevenSeg_set_val(1, get_temp(1));			
 
