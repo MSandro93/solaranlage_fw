@@ -84,6 +84,29 @@ ISR(INT0_vect)
 			break;
 		}
 		
+		case SWITCH_MODES:
+		{
+			int8_t m_ = MODE_AUTO;
+			
+			if( (ENC_PINPORT & (1<<ENC_B_PIN)) > 0) //gegen den Uhrzeigersinn
+			{
+				m_ = (int8_t)get_current_mode() - 1;
+				if(m_ < MODE_AUTO)
+				{
+					m_ = MODE_OFF;
+				}
+			}
+			else									//im Uhrzeigersinn
+			{
+				m_ = (int8_t)get_current_mode() + 1;
+				if(m_ > MODE_OFF)
+				{
+					m_ = MODE_AUTO;
+				}
+			}
+			set_current_mode(m_);
+		}
+		
 		
 		
 		default:
@@ -145,12 +168,32 @@ ISR(INT1_vect)  //if the encoder got pushed
 			break;
 		}
 		
-		case  MODIFY_K:
+		case MODIFY_K:
 		{			
 			if(eeprom_read_float((float*)2) != get_k())
 			{
 				eeprom_update_float((float*)2, get_k());
 			}
+			setState(SWITCH_MODES);
+			break;
+		}
+		
+		case SWITCH_MODES:
+		{
+			switch(get_current_mode())
+			{
+				case MODE_OFF:
+				{
+					set_PWM(0);
+					break;
+				}
+				case MODE_ON:
+				{
+					set_PWM(100);
+					break;
+				}
+			}
+			
 			setState(SHOW_TEMPS);
 			break;
 		}

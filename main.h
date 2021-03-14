@@ -16,13 +16,21 @@ enum state
 	SHOW_TEMPS,
 	MODIFY_DELTA1,
 	MODIFY_DELTA2,
-	MODIFY_K
+	MODIFY_K,
+	SWITCH_MODES
 };
 
 enum display
 {
 	DISPLAY_KESSEL,
 	DISPLAY_DACH
+};
+
+enum modes
+{
+	MODE_AUTO,
+	MODE_ON,
+	MODE_OFF
 };
 
 void setState(uint8_t s);

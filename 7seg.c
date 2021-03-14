@@ -4,14 +4,16 @@
  * Created: 09.11.2020 10:25:44
  *  Author: stoff
  */ 
-#include <stdint.h>
+#include <stdint.h>w
 #include <stdio.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "main.h"
 
 
-uint8_t patterns[] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x00, 0x40, 0x5C, 0x47, 0x54};
-	               // '0' , '1' ,  '2', '3' , '4' , '5' , '6' , '7' , '8' , '9' ,  off, '-',  'o' ,  'f', 'n'
+uint8_t patterns[] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F, 0x00, 0x40, 0x78, 0x77, 0x54, 0x5C, 0x71, 0x1C };
+	               // '0' , '1' ,  '2', '3' , '4' , '5' , '6' , '7' , '8' , '9' ,  off,  '-', 't' , 'A' , 'n' , 'o' , 'f' , 'u'
+				   //  0     1      2    3     4     5     6     7     8    9      10     11   12   13     14    15   16    17
 uint16_t segs[6] = {0, 0, 0, 0, 0, 0};
 uint8_t seg_cnt = 0;
 uint16_t dach_anzeige = 0;
@@ -129,6 +131,41 @@ void SevenSeg_set_val_f(uint8_t seg, float val)
 		segs[seg+4] = h;
 }
 
+
+void SevenSeg_display_mode(uint8_t seg, uint8_t m)
+{
+	switch(m)
+	{
+		case MODE_AUTO:
+		{
+			segs[seg]   = 12;  //'t'
+			segs[seg+2] = 17;  //'u'
+			segs[seg+4] = 13;  //'A'
+			break;
+		}
+		
+		case MODE_ON:
+		{
+			segs[seg]   = 14;  //'n'
+			segs[seg+2] = 15;  //'o'
+			segs[seg+4] = 10;   //switch off
+			break;
+		}
+		
+		case MODE_OFF:
+		{
+			segs[seg]   = 16;  //'f'
+			segs[seg+2] = 16;  //'f'
+			segs[seg+4] = 15;  //'o'
+			break;
+		}
+		
+		default:
+		break;
+	}
+	
+	
+}
 
 ISR(TIMER0_OVF_vect)
 {

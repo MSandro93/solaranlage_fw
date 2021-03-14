@@ -144,6 +144,29 @@ int main(void)
 				extGPO_update();
 				break;
 			}
+			
+			case SWITCH_MODES:
+			{
+				SevenSeg_display_mode(DISPLAY_DACH, get_current_mode());
+				SevenSeg_set_val(DISPLAY_KESSEL, 1000);
+				
+				if(SevenSeg_get_state() == 0)						//enable display only if it is off
+				{
+					SevenSeg_on();
+				}
+				
+				extGPOS_clearAll();
+				extGPO_switch(LED_MODE, EXGPO_ON);
+				extGPO_update();
+				
+				break;
+			}
+			
+			default:
+			{
+				setState(INIT);
+				DDRC &= ~(1<<WDI_PIN);  //set WDI-pin to input-mode -> prevents serving of the WD -> forces reset.
+			}
 		}
 		WDI_PORT ^= (1<<WDI_PIN);
 	}

@@ -13,6 +13,7 @@
 #include <avr/interrupt.h>
 #include <math.h>
 #include "uart.h"
+#include "main.h"
 
 volatile uint8_t show_temps = 0;
 volatile uint8_t delta1;
@@ -25,6 +26,7 @@ volatile uint8_t duty = 0;
 volatile uint8_t log_counter = 0;
 volatile uint8_t comming_from_high_temp = 0;
 volatile float   k = 2.0f;
+volatile uint8_t current_mode = MODE_AUTO;
 
 #define OVERSAMPLING_CNT 10
 
@@ -189,6 +191,16 @@ void set_k(float f)
 	k = f;
 }
 
+uint8_t get_current_mode()
+{
+	return current_mode;
+}
+
+void set_current_mode(uint8_t m)
+{
+	current_mode = m;
+}
+
 ISR(TIMER2_OVF_vect)
 {	
 	
@@ -242,8 +254,32 @@ ISR(TIMER2_OVF_vect)
 				comming_from_high_temp = 0;
 			}
 		}
+
+
+
+		switch (current_mode)
+		{			
+			case MODE_ON:
+			{
+				duty = 100;
+				break;
+			}
+			case MODE_OFF:
+			{
+				duty = 0;
+				break;
+			}
+			case MODE_AUTO:
+			{
+				break;
+			}
+			default:
+				break;
+		}
 		
-//		set_PWM(duty);
+		
+		set_PWM(duty);
+		
 	
 		loop_cnt = 0;
 
