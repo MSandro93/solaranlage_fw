@@ -117,6 +117,7 @@ int main(void)
 			{
 				SevenSeg_set_val(1, 1000);							//set Dach-display off
 				SevenSeg_set_val(0, get_delta(2));
+				
 				if(SevenSeg_get_state() == 0)						//enable display only if it is off
 				{
 					SevenSeg_on();
@@ -124,6 +125,22 @@ int main(void)
 				
 				extGPOS_clearAll();
 				extGPO_switch(LED_DELTA2, EXGPO_ON);
+				extGPO_update();
+				break;
+			}
+			
+			case MODIFY_K:
+			{
+				SevenSeg_set_val_f(DISPLAY_KESSEL, get_k());
+				SevenSeg_set_val(DISPLAY_DACH, 1000);
+				
+				if(SevenSeg_get_state() == 0)						//enable display only if it is off
+				{
+					SevenSeg_on();
+				}
+				
+				extGPOS_clearAll();
+				extGPO_switch(LED_K_FACTOR, EXGPO_ON);
 				extGPO_update();
 				break;
 			}

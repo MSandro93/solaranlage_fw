@@ -47,6 +47,11 @@ ISR(TIMER1_OVF_vect)
 	{
 		eeprom_update_byte((uint8_t*)(1), (uint8_t)get_delta(2));
 	}
+
+	if(eeprom_read_float((float*)2) != get_k())
+	{
+		eeprom_update_float((float*)2, get_k());
+	}	
 	
 	setState(DISPLAY_OFF);
 	

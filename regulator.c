@@ -21,10 +21,10 @@ volatile int16_t temp_dach = 0;
 volatile int16_t temp_kessel = 0;
 volatile uint8_t loop_cnt = 0;
 volatile int16_t d_teta = 0;
-volatile uint8_t k = 2;
 volatile uint8_t duty = 0;
 volatile uint8_t log_counter = 0;
 volatile uint8_t comming_from_high_temp = 0;
+volatile float   k = 2.0f;
 
 #define OVERSAMPLING_CNT 10
 
@@ -32,18 +32,25 @@ void regulator_init()
 {
 	delta1 = eeprom_read_byte((uint8_t*)0);
 	delta2 = eeprom_read_byte((uint8_t*)1);
+	     k = eeprom_read_float((float*)2);
 	
-	if(delta1 > 70)						//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was ereased befor programing.
+	if(delta1 > 70)						//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was ereased before programing.
 	{
 		delta1 = 70;
 		eeprom_update_byte((uint8_t*)0, 70);
 		
 	}
 	
-	if(delta2 > 70)						//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was ereased befor programing.
+	if(delta2 > 70)						//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was ereased before programing.
 	{
 		delta1 = 70;
 		eeprom_update_byte((uint8_t*)1, 70);
+	}
+	
+	if((k > 9.99f) | (k < 0.00f) | (k!=k))	 //clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was ereased before programing.
+	{										 //"(k!=k)": "ccording to the IEEE standard, NaN values have the odd property that comparisons involving them are always false. That is, for a float f, f != f will be true only if f is NaN." (stackoverflow)
+		k = 2.00f;
+		eeprom_update_float((float*)2, 2.00f);
 	}
 	
 	
@@ -172,6 +179,15 @@ void set_PWM(uint8_t duty)
 }
 
 
+float get_k()
+{
+	return k;
+}
+
+void set_k(float f)
+{
+	k = f;
+}
 
 ISR(TIMER2_OVF_vect)
 {	

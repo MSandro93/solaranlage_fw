@@ -39,7 +39,7 @@ ISR(INT0_vect)
 	
 	switch(getState())
 	{
-		case 3:	
+		case MODIFY_DELTA1:	
 		{	
 			if( (ENC_PINPORT & (1<<ENC_B_PIN)) > 0) //gegen den Uhrzeigersinn
 			{
@@ -54,7 +54,7 @@ ISR(INT0_vect)
 			break;
 		}
 		
-		case 4:
+		case MODIFY_DELTA2:
 		{
 			if( (ENC_PINPORT & (1<<ENC_B_PIN)) > 0) //gegen den Uhrzeigersinn
 			{
@@ -68,6 +68,23 @@ ISR(INT0_vect)
 			}
 			break;
 		}
+		
+		case MODIFY_K:
+		{
+			if( (ENC_PINPORT & (1<<ENC_B_PIN)) > 0) //gegen den Uhrzeigersinn
+			{
+				if(get_k() > 0)
+				set_k(get_k() - 0.01f);			    //prevent the proportional ration k from becoming negative
+			}
+			else									//im Uhrzeigersinn
+			{
+				if(get_k() < 9.99f)
+				set_k(get_k() + 0.01f);				//prevent the proportional ration k from becoming lager than 9.99f
+			}
+			break;
+		}
+		
+		
 		
 		default:
 			break;
@@ -89,7 +106,7 @@ ISR(INT1_vect)  //if the encoder got pushed
 	
 	switch(getState())
 	{
-		case 1:
+		case DISPLAY_OFF:
 		{
 			setState(SHOW_TEMPS);
 			
@@ -100,13 +117,15 @@ ISR(INT1_vect)  //if the encoder got pushed
 			start_timeout_timer();
 			break;
 		}
-		case 2:
+		
+		case SHOW_TEMPS:
 		{
 			setState(MODIFY_DELTA1);
 			start_timeout_timer();
 			break;
 		}
-		case 3:
+		
+		case MODIFY_DELTA1:
 		{
 			if(eeprom_read_byte((uint8_t*)0) != get_delta(1))
 			{
@@ -115,15 +134,29 @@ ISR(INT1_vect)  //if the encoder got pushed
 			setState(MODIFY_DELTA2);
 			break;
 		}
-		case 4:
+		
+		case MODIFY_DELTA2:
 		{
 			if(eeprom_read_byte((uint8_t*)1) != get_delta(2))
 			{
 				eeprom_update_byte((uint8_t*)1, get_delta(2));
 			}
+			setState(MODIFY_K);
+			break;
+		}
+		
+		case  MODIFY_K:
+		{			
+			if(eeprom_read_float((float*)2) != get_k())
+			{
+				eeprom_update_float((float*)2, get_k());
+			}
 			setState(SHOW_TEMPS);
 			break;
 		}
+		
+		
+
 	}
 	
 	sei();

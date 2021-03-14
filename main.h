@@ -9,7 +9,21 @@
 #ifndef MAIN_H_
 #define MAIN_H_
 
-enum state { INIT, DISPLAY_OFF, SHOW_TEMPS, MODIFY_DELTA1, MODIFY_DELTA2};
+enum state
+{
+	INIT,
+	DISPLAY_OFF,
+	SHOW_TEMPS,
+	MODIFY_DELTA1,
+	MODIFY_DELTA2,
+	MODIFY_K
+};
+
+enum display
+{
+	DISPLAY_KESSEL,
+	DISPLAY_DACH
+};
 
 void setState(uint8_t s);
 uint8_t getState(void);
