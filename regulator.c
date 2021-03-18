@@ -316,6 +316,11 @@ ISR(TIMER2_OVF_vect)
 				break;
 		}
 		
+		if ((dach_ol == 1) | (kessel_ol == 1))
+		{
+			duty = 0;
+		}
+		
 		
 		set_PWM(duty);
 		

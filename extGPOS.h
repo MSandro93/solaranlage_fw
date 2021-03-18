@@ -28,7 +28,7 @@ typedef enum
 
 
 void extGPOs_init(void);
-void extGPOS_clearAll(void);
+void extGPOS_clearAllLEDs(void);
 uint8_t extGPO_switch(extGPO ego, extGPO_state s);
 void extGPO_update(void);
 

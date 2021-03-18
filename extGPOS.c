@@ -29,9 +29,9 @@ void extGPOs_init(void)
 	SR_LATCH_PORT &= ~(1<<SR_LATCH_PIN);		//initial SR_DATA with LOW
 }
 
-void extGPOS_clearAll(void)
+void extGPOS_clearAllLEDs(void)
 {
-	buff = 0;
+	buff &= (1<<BUZZER);
 }
 
 uint8_t extGPO_switch(extGPO ego,  extGPO_state s)

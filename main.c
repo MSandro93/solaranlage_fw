@@ -28,7 +28,8 @@ static FILE mystdout = FDEV_SETUP_STREAM(uart_putchar, NULL, _FDEV_SETUP_WRITE);
 int main(void)
 {
 	extGPOs_init();
-	extGPOS_clearAll();
+	extGPOS_clearAllLEDs();
+	extGPO_switch(BUZZER, EXGPO_OFF);
 	extGPO_update();
 	
 	
@@ -54,6 +55,18 @@ int main(void)
 	
 	while(1)	
 	{	
+		//handling open load of sensors
+		if( (get_openLoad(DISPLAY_DACH) == 1) | (get_openLoad(DISPLAY_KESSEL) == 1) )					//if sensor dach open load...
+		{
+			extGPO_switch(BUZZER, EXGPO_ON);
+		}
+		else
+		{
+			extGPO_switch(BUZZER, EXGPO_OFF);
+		}
+		extGPO_update();
+		//
+		
 		switch(state)
 		{
 			case INIT:
@@ -64,7 +77,7 @@ int main(void)
 				}
 				setState(DISPLAY_OFF);
 				
-				extGPOS_clearAll();
+				extGPOS_clearAllLEDs();
 				extGPO_update();
 				break;
 			}
@@ -76,39 +89,23 @@ int main(void)
 					SevenSeg_off();
 				}
 				
-				extGPOS_clearAll();
+				extGPOS_clearAllLEDs();
 				extGPO_update();
 				break;
 			}
 				
 			case SHOW_TEMPS:
 			{				
-				if( get_openLoad(DISPLAY_DACH) == 1 )					//if sensor dach open load...
-				{
-					SevenSeg_set_OpenLoad(DISPLAY_DACH);
-				}
-				else
-				{
-					SevenSeg_set_val(DISPLAY_DACH, get_temp(1));
-				}
-				
-				if( get_openLoad(DISPLAY_KESSEL) == 1 )					//if sensor kessel open load...
-				{
-					SevenSeg_set_OpenLoad(DISPLAY_KESSEL);
-				}
-				else
-				{
-					SevenSeg_set_val(DISPLAY_KESSEL, get_temp(0));
-				}
-				
-							
-
+			
 				if(SevenSeg_get_state() == 0)						//enable display only if it is off
 				{
 					SevenSeg_on();
 				}
 				
-				extGPOS_clearAll();
+				SevenSeg_set_val(DISPLAY_DACH, get_temp(DISPLAY_DACH));
+				SevenSeg_set_val(DISPLAY_KESSEL, get_temp(DISPLAY_KESSEL));
+
+				extGPOS_clearAllLEDs();
 				extGPO_switch(LED_TEMP_DACH, EXGPO_ON);
 				extGPO_switch(LED_TEMP_KELLER, EXGPO_ON);
 				extGPO_update();
@@ -117,14 +114,14 @@ int main(void)
 			
 			case MODIFY_DELTA1: 
 			{
-				SevenSeg_set_val(1, get_delta(1));
-				SevenSeg_set_val(0, 1000);							//set Kessel-display off
+				SevenSeg_set_val(DISPLAY_DACH, get_delta(1));
+				SevenSeg_set_val(DISPLAY_KESSEL, 1000);							//set Kessel-display off
 				if(SevenSeg_get_state() == 0)						//enable display only if it is off
 				{
 					SevenSeg_on();
 				}
 				
-				extGPOS_clearAll();
+				extGPOS_clearAllLEDs();
 				extGPO_switch(LED_DELTA1, EXGPO_ON);
 				extGPO_update();
 				break;
@@ -132,15 +129,15 @@ int main(void)
 			
 			case MODIFY_DELTA2:
 			{
-				SevenSeg_set_val(1, 1000);							//set Dach-display off
-				SevenSeg_set_val(0, get_delta(2));
+				SevenSeg_set_val(DISPLAY_DACH, 1000);							//set Dach-display off
+				SevenSeg_set_val(DISPLAY_KESSEL, get_delta(2));
 				
 				if(SevenSeg_get_state() == 0)						//enable display only if it is off
 				{
 					SevenSeg_on();
 				}
 				
-				extGPOS_clearAll();
+				extGPOS_clearAllLEDs();
 				extGPO_switch(LED_DELTA2, EXGPO_ON);
 				extGPO_update();
 				break;
@@ -156,7 +153,7 @@ int main(void)
 					SevenSeg_on();
 				}
 				
-				extGPOS_clearAll();
+				extGPOS_clearAllLEDs();
 				extGPO_switch(LED_K_FACTOR, EXGPO_ON);
 				extGPO_update();
 				break;
@@ -172,7 +169,7 @@ int main(void)
 					SevenSeg_on();
 				}
 				
-				extGPOS_clearAll();
+				extGPOS_clearAllLEDs();
 				extGPO_switch(LED_MODE, EXGPO_ON);
 				extGPO_update();
 				
