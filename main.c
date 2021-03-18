@@ -62,7 +62,7 @@ int main(void)
 		}
 		else
 		{
-			extGPO_switch(BUZZER, EXGPO_OFF);
+	//		extGPO_switch(BUZZER, EXGPO_OFF);
 		}
 		extGPO_update();
 		//

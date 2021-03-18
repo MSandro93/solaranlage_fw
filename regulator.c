@@ -243,7 +243,7 @@ ISR(TIMER2_OVF_vect)
 		
 		
 		// open load handling
-		if(temp_dach > 250)
+		if(temp_dach > 200)
 		{
 			dach_ol = 1;
 		}
@@ -252,7 +252,7 @@ ISR(TIMER2_OVF_vect)
 			dach_ol = 0;
 		}
 		
-		if(temp_kessel > 250)
+		if(temp_kessel > 200)
 		{
 			kessel_ol = 1;
 		}

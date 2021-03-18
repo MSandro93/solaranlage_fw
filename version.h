@@ -1,2 +1,2 @@
-#define REPO_VERSION_HASH "7d7d08d" 
+#define REPO_VERSION_HASH "256175a" 
 #define FW_VERSION_TAG "Rev.B" 
