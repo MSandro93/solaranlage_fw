@@ -20,13 +20,15 @@ volatile uint8_t delta1;
 volatile uint8_t delta2;
 volatile int16_t temp_dach = 0;
 volatile int16_t temp_kessel = 0;
-volatile uint8_t loop_cnt = 0;
+volatile uint16_t loop_cnt = 0;
 volatile int16_t d_teta = 0;
 volatile uint8_t duty = 0;
 volatile uint8_t log_counter = 0;
 volatile uint8_t comming_from_high_temp = 0;
 volatile float   k = 2.0f;
 volatile uint8_t current_mode = MODE_AUTO;
+volatile uint8_t dach_ol = 0;					//open load flag sensor dach
+volatile uint8_t kessel_ol = 0;					//open load flag sensor kessel
 
 #define OVERSAMPLING_CNT 10
 
@@ -43,25 +45,25 @@ void regulator_init()
 		
 	}
 	
-	if(delta2 > 70)						//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was ereased before programing.
+	if(delta2 > 70)											//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was erased before programing.
 	{
 		delta1 = 70;
 		eeprom_update_byte((uint8_t*)1, 70);
 	}
 	
-	if((k > 9.99f) | (k < 0.00f) | (k!=k))	 //clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was ereased before programing.
-	{										 //"(k!=k)": "ccording to the IEEE standard, NaN values have the odd property that comparisons involving them are always false. That is, for a float f, f != f will be true only if f is NaN." (stackoverflow)
+	if((k > 9.99f) | (k < 0.00f) | (k!=k))					//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is erased because the EEPROM was erased before programing.
+	{														//"(k!=k)": "ccording to the IEEE standard, NaN values have the odd property that comparisons involving them are always false. That is, for a float f, f != f will be true only if f is NaN." (stackoverflow)
 		k = 2.00f;
 		eeprom_update_float((float*)2, 2.00f);
 	}
 	
 	
 	ADMUX = 0x00;
-	ADMUX &= ~(1<<ADLAR);			  //enable left-alignment
-	ADCSRA |= (1<<ADEN);			  //enable ADC
+	ADMUX &= ~(1<<ADLAR);										//enable left-alignment
+	ADCSRA = (1<<ADEN)|(1<<ADPS2)|(1<<ADPS1)|(1<<ADPS0);		//set precaler to 128 -> 57.6 Khz. Valid range is 50 kHz to 200 kHz; enable  ADC
 	
-	TCCR2 |= (1<<CS22) | (1<<CS21) | (1<<CS20) | (1<<WGM21) | (1<<WGM20) | (1<<COM21) ;  //setting prescaler to /1024; setting mode to Fast PWM.
-	TIMSK |= (1<<TOIE2);						 //enable overflow interrupt for TIM2
+	TCCR2 |= (1<<CS21) | (1<<CS20) | (1<<WGM21) | (1<<WGM20) | (1<<COM21) ;  //_ting prescaler to /32; setting mode to Fast PWM.
+	TIMSK |= (1<<TOIE2);													//enable overflow interrupt for TIM2
 	
 	DDRD |= (1<<PD7);				//set the PWM-output pin to output-mode
 	
@@ -133,7 +135,7 @@ int16_t measure_temp(uint8_t sensor)
 		ADMUX &= ~0x1F;							//clear MUX4:0
 		
 		if(sensor == 0)
-		ADMUX |= (1<<MUX0);					//set ADC to CH1. If CH2 has to be sampled MUX[4:0] is already 0, because it was restted above
+		ADMUX |= (1<<MUX0);						//set ADC to CH1. If CH2 has to be sampled MUX[4:0] is already 0, because it was reseted above.
 		
 		ADCSRA |= (1<<ADSC);					//start conversion
 		
@@ -147,7 +149,7 @@ int16_t measure_temp(uint8_t sensor)
 		adc_val_avg += adc_val;					//sum up ADC values for oversampling
 	}
 	
-	adc_val = (uint16_t)(adc_val_avg / OVERSAMPLING_CNT); //calculate average with oversampling count
+	adc_val = (uint16_t)(adc_val_avg / OVERSAMPLING_CNT);	//calculate average with oversampling count
 	
 	float voltage = adc_val * 4.854e-3f;									//get voltage from ADC-values
 	float temp_f = (7382.06f - voltage*2751.75f)/(voltage - 29.323f);		//get temperature from voltage
@@ -196,6 +198,22 @@ uint8_t get_current_mode()
 	return current_mode;
 }
 
+uint8_t get_openLoad(uint8_t seg)
+{
+	if(seg == DISPLAY_DACH)
+	{
+		return dach_ol;
+	}
+	if(seg == DISPLAY_KESSEL)
+	{
+		return kessel_ol;	
+	}
+	else
+	{
+		return 2;
+	}
+}
+
 void set_current_mode(uint8_t m)
 {
 	current_mode = m;
@@ -206,7 +224,7 @@ ISR(TIMER2_OVF_vect)
 	
 	cli();
 	
-	if(loop_cnt < 62) //if 2s are not passed
+	if(loop_cnt < 1807) //if 2s are not passed
 	{
 		loop_cnt++;
 	}
@@ -220,8 +238,29 @@ ISR(TIMER2_OVF_vect)
 		
 		PORTD ^= (1<<PD5);
 
-		temp_dach   = measure_temp(1) - 3; //-3 to compensate the wires
+		temp_dach   = measure_temp(1) - 3;					//-3 to compensate the wires
 		temp_kessel = measure_temp(0);
+		
+		
+		// open load handling
+		if(temp_dach > 250)
+		{
+			dach_ol = 1;
+		}
+		else
+		{
+			dach_ol = 0;
+		}
+		
+		if(temp_kessel > 250)
+		{
+			kessel_ol = 1;
+		}
+		else
+		{
+			kessel_ol = 0;
+		}
+		//
 		
 		
 		d_teta = temp_dach - temp_kessel;
@@ -235,7 +274,7 @@ ISR(TIMER2_OVF_vect)
 		{
 			if( d_teta >= delta2)							//if we are still above delta 2
 			{
-				if((d_teta * k) >= 0)						//if d_teta is negative the multiplication with k will lead to a negative duty cycle, so thsi has to be handled
+				if((d_teta * k) >= 0)						//if d_teta is negative the multiplication with k will lead to a negative duty cycle, so this has to be handled
 				{
 					duty = (uint8_t) d_teta * k;			//50 Kevlin -> 100% PWM
 					if( duty > 100)

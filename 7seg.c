@@ -4,7 +4,7 @@
  * Created: 09.11.2020 10:25:44
  *  Author: stoff
  */ 
-#include <stdint.h>w
+#include <stdint.h>
 #include <stdio.h>
 #include <avr/io.h>
 #include <avr/interrupt.h>
@@ -131,6 +131,12 @@ void SevenSeg_set_val_f(uint8_t seg, float val)
 		segs[seg+4] = h;
 }
 
+void SevenSeg_set_OpenLoad(uint8_t seg)
+{
+	segs[seg]   = 11;											
+	segs[seg+2] = 11;
+	segs[seg+4] = 11;
+}
 
 void SevenSeg_display_mode(uint8_t seg, uint8_t m)
 {

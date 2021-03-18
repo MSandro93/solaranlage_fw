@@ -11,6 +11,7 @@ void SevenSeg_init(void);
 void SevenSeg_set_val(uint8_t seg, uint16_t val);
 void SevenSeg_set_val_f(uint8_t seg, float val);
 void SevenSeg_display_mode(uint8_t seg, uint8_t m);
+void SevenSeg_set_OpenLoad(uint8_t seg);
 
 void SevenSeg_on(void);
 void SevenSeg_off(void);

@@ -29,6 +29,7 @@ int main(void)
 {
 	extGPOs_init();
 	extGPOS_clearAll();
+	extGPO_update();
 	
 	
 	PORTA = 0x00;
@@ -50,7 +51,6 @@ int main(void)
 	Timeout_init();
 	Encoder_init();
 	
-
 	
 	while(1)	
 	{	
@@ -83,8 +83,25 @@ int main(void)
 				
 			case SHOW_TEMPS:
 			{				
-				SevenSeg_set_val(0, get_temp(0));
-				SevenSeg_set_val(1, get_temp(1));			
+				if( get_openLoad(DISPLAY_DACH) == 1 )					//if sensor dach open load...
+				{
+					SevenSeg_set_OpenLoad(DISPLAY_DACH);
+				}
+				else
+				{
+					SevenSeg_set_val(DISPLAY_DACH, get_temp(1));
+				}
+				
+				if( get_openLoad(DISPLAY_KESSEL) == 1 )					//if sensor kessel open load...
+				{
+					SevenSeg_set_OpenLoad(DISPLAY_KESSEL);
+				}
+				else
+				{
+					SevenSeg_set_val(DISPLAY_KESSEL, get_temp(0));
+				}
+				
+							
 
 				if(SevenSeg_get_state() == 0)						//enable display only if it is off
 				{

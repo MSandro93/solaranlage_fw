@@ -22,5 +22,6 @@ float get_k(void);
 void set_k(float f);
 uint8_t get_current_mode(void);
 void set_current_mode(uint8_t m);
+uint8_t get_openLoad(uint8_t seg);
 
 #endif /* REGULATOR_H_ */
