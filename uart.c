@@ -25,7 +25,7 @@ int uart_putchar(char c, FILE *stream)
 		uart_putchar('\r', stream);
 		
 		
-	while( (UCSRA & (1<<UDRE)) ==0 )
+	while( (UCSRA & (1<<UDRE)) == 0 )
 	{
 	}
 		

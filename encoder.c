@@ -197,9 +197,6 @@ ISR(INT1_vect)  //if the encoder got pushed
 			setState(SHOW_TEMPS);
 			break;
 		}
-		
-		
-
 	}
 	
 	sei();

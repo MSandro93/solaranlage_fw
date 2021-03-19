@@ -14,6 +14,7 @@
 #include <math.h>
 #include "uart.h"
 #include "main.h"
+#include "extGPOS.h"
 
 volatile uint8_t show_temps = 0;
 volatile uint8_t delta1;
@@ -242,7 +243,7 @@ ISR(TIMER2_OVF_vect)
 		temp_kessel = measure_temp(0);
 		
 		
-		// open load handling
+		// open load and overtemperature handling
 		if(temp_dach > 200)
 		{
 			dach_ol = 1;
@@ -251,7 +252,9 @@ ISR(TIMER2_OVF_vect)
 		{
 			dach_ol = 0;
 		}
+		//
 		
+		// open load handling
 		if(temp_kessel > 200)
 		{
 			kessel_ol = 1;
@@ -261,6 +264,19 @@ ISR(TIMER2_OVF_vect)
 			kessel_ol = 0;
 		}
 		//
+		
+		
+		if(temp_dach > 120)
+		{
+			extGPO_switch(BUZZER, EXGPO_ON);
+			extGPO_update();
+		}
+		else if((dach_ol == 0) && (kessel_ol == 0))
+		{
+			extGPO_switch(BUZZER, EXGPO_OFF);
+			extGPO_update();
+		}
+		
 		
 		
 		d_teta = temp_dach - temp_kessel;
