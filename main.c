@@ -56,14 +56,18 @@ int main(void)
 	while(1)	
 	{	
 		//handling open load of sensors
-		if( (get_openLoad(DISPLAY_DACH) == 1) | (get_openLoad(DISPLAY_KESSEL) == 1) )					//if sensor dach open load...
+		if(get_openLoad(DISPLAY_DACH) == 1)
 		{
+			SevenSeg_set_OpenLoad(DISPLAY_DACH);
 			extGPO_switch(BUZZER, EXGPO_ON);
 		}
-		else
+		if(get_openLoad(DISPLAY_KESSEL) == 1)
 		{
-	//		extGPO_switch(BUZZER, EXGPO_OFF);
+			SevenSeg_set_OpenLoad(DISPLAY_KESSEL);
+			extGPO_switch(BUZZER, EXGPO_ON);
 		}
+				
+
 		extGPO_update();
 		//
 		
@@ -102,8 +106,11 @@ int main(void)
 					SevenSeg_on();
 				}
 				
-				SevenSeg_set_val(DISPLAY_DACH, get_temp(DISPLAY_DACH));
-				SevenSeg_set_val(DISPLAY_KESSEL, get_temp(DISPLAY_KESSEL));
+				if(get_openLoad(DISPLAY_DACH) == 0)
+					SevenSeg_set_val(DISPLAY_DACH, get_temp(DISPLAY_DACH));
+					
+				if(get_openLoad(DISPLAY_KESSEL) == 0)
+					SevenSeg_set_val(DISPLAY_KESSEL, get_temp(DISPLAY_KESSEL));
 
 				extGPOS_clearAllLEDs();
 				extGPO_switch(LED_TEMP_DACH, EXGPO_ON);
