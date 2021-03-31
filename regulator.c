@@ -46,10 +46,10 @@ void regulator_init()
 		
 	}
 	
-	if(delta2 > 70)											//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was erased before programing.
+	if(delta2 > 5)											//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is readed because the EEPROM was erased before programing.
 	{
-		delta1 = 70;
-		eeprom_update_byte((uint8_t*)1, 70);
+		delta2 = 5;
+		eeprom_update_byte((uint8_t*)1, 5);
 	}
 	
 	if((k > 9.99f) | (k < 0.00f) | (k!=k))					//clip if a non plausible value was loaded from the EEPROM. (e.g. after flashing the fw, 255 is erased because the EEPROM was erased before programing.
