@@ -119,7 +119,7 @@ void SevenSeg_set_val_f(uint8_t seg, float val)
 			return;
 		}
 
-		uint8_t val_i = (uint8_t)(val * 100);
+		uint16_t val_i = (uint16_t)(val * 100);
 		
 		uint8_t h = (uint8_t) (val_i/100);							//separate the digits of the value
 		uint8_t z = (uint8_t) ((val_i- (h*100)) / 10 );
