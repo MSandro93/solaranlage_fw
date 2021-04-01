@@ -156,6 +156,12 @@
     <Compile Include="extGPOS.h">
       <SubType>compile</SubType>
     </Compile>
+    <Compile Include="filter.c">
+      <SubType>compile</SubType>
+    </Compile>
+    <Compile Include="filter.h">
+      <SubType>compile</SubType>
+    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>

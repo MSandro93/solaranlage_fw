@@ -15,6 +15,7 @@
 #include "uart.h"
 #include "main.h"
 #include "extGPOS.h"
+#include "filter.h"
 
 volatile uint8_t show_temps = 0;
 volatile uint8_t delta1;
@@ -35,6 +36,8 @@ volatile uint8_t kessel_ol = 0;					//open load flag sensor kessel
 
 void regulator_init()
 {
+	filter_init();
+	
 	delta1 = eeprom_read_byte((uint8_t*)0);
 	delta2 = eeprom_read_byte((uint8_t*)1);
 	     k = eeprom_read_float((float*)2);
@@ -239,7 +242,7 @@ ISR(TIMER2_OVF_vect)
 		
 		PORTD ^= (1<<PD5);
 
-		temp_dach   = measure_temp(1) - 3;					//-3 to compensate the wires
+		temp_dach   = filter(measure_temp(1) - 3);					//-3 to compensate the wires
 		temp_kessel = measure_temp(0);
 		
 		
