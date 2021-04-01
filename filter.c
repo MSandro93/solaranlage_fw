@@ -12,7 +12,7 @@
 /**
  * The size of our filter. We specify it in bits
  */
-#define FILTER_SIZE_IN_BITS (2)
+#define FILTER_SIZE_IN_BITS (3)
 #define FILTER_SIZE ( 1 << (FILTER_SIZE_IN_BITS) )
  
 /**
