@@ -36,7 +36,8 @@ volatile uint8_t kessel_ol = 0;					//open load flag sensor kessel
 
 void regulator_init()
 {
-	filter_init();
+	filter_init(0);
+	filter_init(1);
 	
 	delta1 = eeprom_read_byte((uint8_t*)0);
 	delta2 = eeprom_read_byte((uint8_t*)1);
@@ -183,6 +184,8 @@ int16_t get_temp(uint8_t sensor)
 //sets duty cycle; 0-100%
 void set_PWM(uint8_t duty)
 {
+	duty = (uint8_t)((duty+33.334f)/1.667f);	//scaling, because the pump does not supply if duty cycle is below 20%. And its supply maximum starts at 80% duty cycle. So 0% -> 20% and 100% -> 80%
+	if(duty > 100) duty = 100;					//clipping
 	OCR2 = (uint8_t)((duty/100.0f)*255);
 }
 
@@ -242,8 +245,8 @@ ISR(TIMER2_OVF_vect)
 		
 		PORTD ^= (1<<PD5);
 
-		temp_dach   = filter(measure_temp(1) - 3);					//-3 to compensate the wires
-		temp_kessel = measure_temp(0);
+		temp_dach   = filter((measure_temp(1) - 3), 0);					//-3 to compensate the wires
+		temp_kessel = filter (measure_temp(0), 1);
 		
 		
 		// open load and overtemperature handling

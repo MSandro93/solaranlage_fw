@@ -14,7 +14,7 @@
  * Here we initialise our filter. In this case we only set the
  * initial position and set all buffer values to zero.
  */
-void filter_init();
+void filter_init(uint8_t filter);
  
 /**
  * This function is called every cycle. It adds substracts the oldest value from
@@ -24,7 +24,7 @@ void filter_init();
  * @param double new_value
  * @return double
  */
-uint8_t filter(uint8_t new_value);
+uint8_t filter(uint8_t new_value, uint8_t filter);
 
 
 #endif /* FILTER_H_ */
