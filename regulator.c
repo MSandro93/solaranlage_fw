@@ -246,10 +246,10 @@ ISR(TIMER2_OVF_vect)
 		PORTD ^= (1<<PD5);
 
 		temp_dach   = filter((measure_temp(1) - 3), 0);					//-3 to compensate the wires
-		temp_kessel = filter (measure_temp(0), 1);
+		temp_kessel = filter( measure_temp(0)     , 1);
 		
 		
-		// open load and overtemperature handling
+		// open load and over temperature handling
 		if(temp_dach > 200)
 		{
 			dach_ol = 1;
