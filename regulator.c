@@ -186,6 +186,7 @@ void set_PWM(uint8_t duty)
 {
 	duty = (uint8_t)((duty+33.334f)/1.667f);	//scaling, because the pump does not supply if duty cycle is below 20%. And its supply maximum starts at 80% duty cycle. So 0% -> 20% and 100% -> 80%
 	if(duty > 100) duty = 100;					//clipping
+	duty = (( (uint8_t)(duty/10.0f) )*10);
 	OCR2 = (uint8_t)((duty/100.0f)*255);
 }
 
