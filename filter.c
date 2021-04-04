@@ -18,24 +18,24 @@
 /**
  *
  */
-uint8_t filter_buffer[2][FILTER_SIZE];
+int16_t filter_buffer[2][FILTER_SIZE];
  
 /**
  * Here we store the sum of all history values
  */
-uint16_t filter_sum[2];
+int16_t filter_sum[2];
  
  
 /**
  * This is the actual position of the ring buffer.
  */
-uint8_t *filter_position[2];
+int16_t *filter_position[2];
  
 /**
  * Here we initialise our filter. In this case we only set the
  * initial position and set all buffer values to zero.
  */
-void filter_init(uint8_t filter)
+void filter_init(int16_t filter)
 {
   filter_sum[filter] = 0;
   filter_position[filter] = filter_buffer[filter];
@@ -54,7 +54,7 @@ void filter_init(uint8_t filter)
  * @param double new_value
  * @return double
  */
-uint8_t filter(uint8_t new_value, uint8_t filter)
+int16_t filter(int16_t new_value, uint8_t filter)
 {
   // Substract oldest value from the sum
   filter_sum[filter] -= *filter_position[filter];
@@ -73,5 +73,5 @@ uint8_t filter(uint8_t new_value, uint8_t filter)
  
   // Return sum divided by FILTER_SIZE, which is faster done by right shifting
   // The size of the ring buffer in bits. ( filter_sum / 2^bits ).
-  return (uint8_t) (filter_sum[filter] >> FILTER_SIZE_IN_BITS);
+  return (int16_t) (filter_sum[filter] >> FILTER_SIZE_IN_BITS);
 }

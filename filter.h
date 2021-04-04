@@ -24,7 +24,7 @@ void filter_init(uint8_t filter);
  * @param double new_value
  * @return double
  */
-uint8_t filter(uint8_t new_value, uint8_t filter);
+int16_t filter(int16_t new_value, uint8_t filter);
 
 
 #endif /* FILTER_H_ */
