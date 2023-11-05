@@ -300,6 +300,18 @@ ISR(TIMER2_OVF_vect)
 				if((d_teta * k) >= 0)						//if d_teta is negative the multiplication with k will lead to a negative duty cycle, so this has to be handled
 				{
 					duty = (uint8_t) d_teta * k;			//50 Kevlin -> 100% PWM
+					
+					//scaling, depending on the absolute temperature at the roof.
+					if(temp_dach >= 80)
+					{
+						duty = (uint8_t) round(duty * 1.75f);
+					}
+					else if(temp_dach >= 75.0f)
+					{
+						duty = (uint8_t) round(duty * 1.25f);
+					}
+					//
+					
 					if( duty > 100)
 					{
 						duty = 100;
