@@ -194,6 +194,13 @@ ISR(INT1_vect)  //if the encoder got pushed
 				}
 			}
 			
+			setState(SHOW_PWM);
+			start_timeout_timer();
+			break;
+		}
+		
+		case SHOW_PWM:
+		{
 			setState(SHOW_TEMPS);
 			break;
 		}

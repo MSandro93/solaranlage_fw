@@ -17,7 +17,8 @@ enum state
 	MODIFY_DELTA1,
 	MODIFY_DELTA2,
 	MODIFY_K,
-	SWITCH_MODES
+	SWITCH_MODES,
+	SHOW_PWM
 };
 
 enum display

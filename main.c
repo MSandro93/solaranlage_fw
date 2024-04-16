@@ -183,6 +183,23 @@ int main(void)
 				break;
 			}
 			
+			case SHOW_PWM:
+			{
+				volatile uint8_t pwm = get_PWM();
+				SevenSeg_set_val(DISPLAY_DACH, pwm);
+				SevenSeg_set_val(DISPLAY_KESSEL, 1000);
+				
+				if(SevenSeg_get_state() == 0)						//enable display only if it is off
+				{
+					SevenSeg_on();
+				}
+				
+				extGPOS_clearAllLEDs();
+				extGPO_update();
+				
+				break;	
+			}
+			
 			default:
 			{
 				setState(INIT);

@@ -16,8 +16,10 @@ uint8_t patterns[] = {0x3F, 0x06, 0x5B, 0x4F, 0x66, 0x6D, 0x7D, 0x07, 0x7F, 0x6F
 				   //  0     1      2    3     4     5     6     7     8    9      10     11   12   13     14    15   16    17
 uint16_t segs[6] = {0, 0, 0, 0, 0, 0};
 uint8_t seg_cnt = 0;
-uint16_t dach_anzeige = 0;
-uint16_t kessel_anzeige = 0;
+uint16_t dach_anzeige_d = 0;
+uint16_t kessel_anzeige_d = 0;
+float dach_anzeige_f = 0.0f;
+float kessel_anzeige_f = 0.0f;
 uint8_t dach_isFloat = 0;		//flags the value at display 1 as float (DP at the left segment will be switched on)
 uint8_t kessel_isFloat = 0;		//flags the value at display 0 as float (DP at the left segment will be switched on)
 uint8_t on = 0;
@@ -38,19 +40,31 @@ void SevenSeg_set_val(uint8_t seg, int16_t val)
 	if(seg == 1)												
 	{
 		dach_isFloat = 0;
-		if (val == dach_anzeige)								//if the value to set is not new, leave function
+		if (val == dach_anzeige_d)								//if the value to set is not new, leave function
 		{
 			return;
 		}
+		else
+		{
+			dach_anzeige_d = val;
+		}
+		dach_isFloat = 0;
+		dach_anzeige_d = 1001.0f; //explanation: see SevenSeg_set_val_f(...). Same problem, other way round
 	}
 	
 	else if(seg == 0)		
 	{
 		kessel_isFloat = 0;
-		if(val == kessel_anzeige)								//if the value to set is not new, leave function
+		if(val == kessel_anzeige_d)								//if the value to set is not new, leave function
 		{
 			return;
 		}
+		else
+		{
+			kessel_anzeige_d = val;
+		}
+		kessel_isFloat = 0;
+		kessel_anzeige_d = 1001.0f; //explanation: see SevenSeg_set_val_f(...). Same problem, other way round
 	}
 	
 	if(val==1000)												//if this display shall be switched off
@@ -95,20 +109,30 @@ void SevenSeg_set_val_f(uint8_t seg, float val)
 {		
 		if(seg == 1)
 		{			
-			if ((val == dach_anzeige) && (dach_isFloat == 1))		//if the value to set is not new, leave function
+			if ((val == dach_anzeige_f) && (dach_isFloat == 1))		//if the value to set is not new, leave function
 			{
 				return;
 			}
+			else
+			{
+				dach_anzeige_f = val;
+			}
 			dach_isFloat = 1;
+			dach_anzeige_d = 1001; //if directly before this function call SevenSeg_set_val(...) was called e.g. to set roof to decimal 1, and it is called again after this function call with 1 for roof again, the 1 is never displayed, because the function call here did not change dach_anzeige_d. So set it to impossible value
 		}
 		
 		else if(seg == 0)
 		{
-			if ((val == kessel_anzeige) && (kessel_isFloat == 1))		//if the value to set is not new, leave function
+			if ((val == kessel_anzeige_f) && (kessel_isFloat == 1))		//if the value to set is not new, leave function
 			{
 				return;
 			}
+			else
+			{
+				kessel_anzeige_f = val;
+			}
 			kessel_isFloat = 1;
+			kessel_anzeige_d = 1001;
 		}
 		
 		if(val==1000)												//if this display shall be switched off

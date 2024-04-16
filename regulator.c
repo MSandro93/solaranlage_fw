@@ -190,6 +190,10 @@ void set_PWM(uint8_t duty)
 	OCR2 = (uint8_t)((duty/100.0f)*255);
 }
 
+uint8_t get_PWM()
+{
+	return duty;
+}
 
 float get_k()
 {

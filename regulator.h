@@ -18,6 +18,7 @@ uint8_t get_delta(uint8_t i_);
 int16_t get_temp(uint8_t sensor);
 int16_t measure_temp(uint8_t sensor);
 void set_PWM(uint8_t duty);
+uint8_t get_PWM();
 float get_k(void);
 void set_k(float f);
 uint8_t get_current_mode(void);
