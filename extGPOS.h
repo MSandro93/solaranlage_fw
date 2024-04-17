@@ -17,7 +17,8 @@ typedef enum
 	LED_K_FACTOR,
 	LED_DELTA2,
 	LED_DELTA1,
-	BUZZER
+	BUZZER,
+	LED_PWM
 } extGPO;
 
 typedef enum

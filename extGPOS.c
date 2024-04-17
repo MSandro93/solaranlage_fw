@@ -67,12 +67,12 @@ void extGPO_update()
 		}
 		
 		SR_CLOCK_PORT |=  (1<<SR_CLOCK_PIN);	//toggle...
-		SR_CLOCK_PORT &= ~(1<<SR_CLOCK_PIN);    //SR_CLOCK HIGH all the way through the complete shift-register.
+		SR_CLOCK_PORT &= ~(1<<SR_CLOCK_PIN);    //...SR_CLOCK HIGH all the way through the complete shift-register.
 	}
 		
 	SR_DATA_PORT &= ~(1<<SR_DATA_PIN);			//reset SR_DATA to LOW
 			
 	SR_LATCH_PORT |=  (1<<SR_LATCH_PIN);		//update the outputs of the shift-register...
-	SR_LATCH_PORT &= ~(1<<SR_LATCH_PIN);		//by toggling SR_LATCH
+	SR_LATCH_PORT &= ~(1<<SR_LATCH_PIN);		//...by toggling SR_LATCH
 }
 

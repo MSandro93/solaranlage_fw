@@ -195,6 +195,7 @@ int main(void)
 				}
 				
 				extGPOS_clearAllLEDs();
+				extGPO_switch(LED_PWM, EXGPO_ON);
 				extGPO_update();
 				
 				break;	
